@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import {
+    Armchair,
+    BookOpen,
+    Car,
+    ClipboardList,
+    FileText,
+    Folder,
+    LayoutGrid,
+} from 'lucide-vue-next';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
@@ -23,12 +31,32 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Matériel',
+        href: '#',
+        icon: Armchair,
+    },
+    {
+        title: 'Commandes',
+        href: '#',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Livraisons',
+        href: '#',
+        icon: Car,
+    },
+    {
+        title: 'Factures',
+        href: '#',
+        icon: FileText,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        href: 'https://github.com/Trolleybeats/terra_sana_location_materiel',
         icon: Folder,
     },
     {
