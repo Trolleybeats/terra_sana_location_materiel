@@ -10,11 +10,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post('/utilisateurs', {
-        onSuccess: () => {
-            form.reset();
-        },
-    });
+    form.post('/utilisateurs');
 };
 </script>
 <template>
