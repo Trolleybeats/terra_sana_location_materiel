@@ -24,15 +24,25 @@ class UtilisateurController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('utilisateurs/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(User $user, Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'type_id' => 'required|integer',
+        ]);
+        $user->create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'type_id' => $request->type_id,
+        ]);
+        return redirect()->route('utilisateurs.index');
     }
 
     /**

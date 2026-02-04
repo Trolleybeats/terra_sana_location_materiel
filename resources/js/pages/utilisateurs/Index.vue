@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User } from '@/types';
+import { Link } from '@inertiajs/vue3';
 
 defineProps<{
     users: User[];
@@ -9,8 +11,13 @@ defineProps<{
 
 <template>
     <AppLayout>
-        <div class="container mx-auto px-4 py-8">
+        <section class="container mx-auto px-4 py-8">
             <h1 class="mb-6 text-3xl font-bold">Utilisateurs</h1>
+            <Button as-child class="pointer-cursor mb-4">
+                <Link href="/utilisateurs/create">
+                    Ajouter un utilisateur
+                </Link>
+            </Button>
 
             <div class="overflow-hidden rounded-lg bg-white shadow-md">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -24,12 +31,12 @@ defineProps<{
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
                             >
-                                Nom
+                                Email
                             </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
                             >
-                                Email
+                                Type
                             </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
@@ -50,14 +57,20 @@ defineProps<{
                                 {{ user.id }}
                             </td>
                             <td
-                                class="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900"
+                                class="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
                             >
-                                {{ user.name }}
+                                {{ user.email }}
                             </td>
                             <td
                                 class="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
                             >
-                                {{ user.email }}
+                                {{
+                                    user.type_id === 1
+                                        ? 'Particulier'
+                                        : user.type_id === 2
+                                          ? 'Professionnel'
+                                          : 'Administrateur'
+                                }}
                             </td>
                             <td
                                 class="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
@@ -80,6 +93,6 @@ defineProps<{
                     </tbody>
                 </table>
             </div>
-        </div>
+        </section>
     </AppLayout>
 </template>
