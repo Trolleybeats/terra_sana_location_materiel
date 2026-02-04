@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Particulier;
+use App\Models\Pays;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,6 +25,7 @@ class ParticulierController extends Controller
     {
         return Inertia::render('particuliers/Create', [
             'user_id' => $request->query('user_id'),
+            'pays' => Pays::all(),
         ]);
     }
 

@@ -30,4 +30,9 @@ class Particulier extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function pays(): BelongsTo
+    {
+        return $this->belongsTo(Pays::class);
+    }
 }

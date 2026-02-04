@@ -7,6 +7,10 @@ const props = defineProps({
         type: [String, Number],
         default: '',
     },
+    pays: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const form = useForm({
@@ -150,16 +154,24 @@ const submit = () => {
                     <label
                         for="pays_id"
                         class="mb-2 block font-medium text-gray-700"
-                        >Pays ID</label
+                        >Pays</label
                     >
-                    <input
-                        type="text"
+                    <select
                         id="pays_id"
                         name="pays_id"
                         v-model="form.pays_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-                    />
+                    >
+                        <option value="">Sélectionnez un pays</option>
+                        <option
+                            v-for="pays in props.pays"
+                            :key="pays.id"
+                            :value="pays.id"
+                        >
+                            {{ pays.nom_pays }}
+                        </option>
+                    </select>
                 </div>
                 <div>
                     <label
