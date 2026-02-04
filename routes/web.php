@@ -17,5 +17,8 @@ Route::get('dashboard', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('utilisateurs', App\Http\Controllers\UtilisateurController::class);
 });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('particuliers', App\Http\Controllers\ParticulierController::class);
+});
 
 require __DIR__.'/settings.php';

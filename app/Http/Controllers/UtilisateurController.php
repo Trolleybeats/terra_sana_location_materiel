@@ -37,11 +37,17 @@ class UtilisateurController extends Controller
             'password' => 'required|min:6',
             'type_id' => 'required|integer',
         ]);
-        $user->create([
+        $newUser = $user->create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'type_id' => $request->type_id,
         ]);
+        
+        // Si c'est un particulier, rediriger vers le formulaire de création de particulier
+        if ($newUser->type_id == 1) {
+            return redirect()->route('particuliers.create', ['user_id' => $newUser->id]);
+        }
+        
         return redirect()->route('utilisateurs.index');
     }
 
