@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('particuliers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('nom_rue');
+            $table->integer('numero_rue');
+            $table->foreignId('nom_commune_id')->constrained('communes');
+            $table->foreignId('numero_commune_id')->constrained('communes');
+            $table->foreignId('pays_id')->constrained('pays');
+            $table->foreignId('langue_id')->constrained('langues');
             $table->timestamps();
         });
     }
