@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commune;
+use App\Models\Langue;
 use App\Models\Particulier;
+use App\Models\Pays;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,13 +27,16 @@ class ParticulierController extends Controller
     {
         return Inertia::render('particuliers/Create', [
             'user_id' => $request->query('user_id'),
+            'pays' => Pays::all(),
+            'communes' => Commune::all(),
+            'langues' => Langue::all(),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Particulier $particulier, Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'user_id' => 'required|integer|unique:particuliers,user_id',
@@ -43,7 +49,7 @@ class ParticulierController extends Controller
             'pays_id' => 'required|integer',
             'langue_id' => 'required|integer',
         ]);
-        $particulier->particulier()->create([
+        Particulier::create([
             'user_id' => $request->user_id,
             'nom' => $request->nom,
             'prenom' => $request->prenom,
