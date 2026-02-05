@@ -11,6 +11,14 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    communes: {
+        type: Array,
+        default: () => [],
+    },
+    langues: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const form = useForm({
@@ -25,6 +33,16 @@ const form = useForm({
     pays_id: '',
     langue_id: '',
 });
+
+// Fonction pour mettre à jour automatiquement le code postal
+const updateCodePostal = () => {
+    const selectedCommune = props.communes.find(
+        (commune) => commune.id === form.nom_commune_id,
+    );
+    if (selectedCommune) {
+        form.numero_commune_id = selectedCommune.id;
+    }
+};
 
 const submit = () => {
     form.post('/particuliers', {
@@ -124,30 +142,40 @@ const submit = () => {
                     <label
                         for="nom_commune_id"
                         class="mb-2 block font-medium text-gray-700"
-                        >Nom de la commune ID</label
+                        >Nom de la commune</label
                     >
-                    <input
-                        type="text"
+                    <select
                         id="nom_commune_id"
                         name="nom_commune_id"
                         v-model="form.nom_commune_id"
+                        @change="updateCodePostal"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-                    />
+                    >
+                        <option value="">Sélectionnez une commune</option>
+                        <option
+                            v-for="commune in props.communes"
+                            :key="commune.id"
+                            :value="commune.id"
+                        >
+                            {{ commune.nom_commune }}
+                        </option>
+                    </select>
                 </div>
                 <div>
                     <label
                         for="numero_commune_id"
                         class="mb-2 block font-medium text-gray-700"
-                        >Numéro de la commune ID</label
+                        >Code postal</label
                     >
                     <input
-                        type="text"
+                        type="number"
                         id="numero_commune_id"
                         name="numero_commune_id"
                         v-model="form.numero_commune_id"
                         required
-                        class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                        readonly
+                        class="w-full cursor-not-allowed rounded border border-gray-300 bg-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
                 </div>
                 <div>
@@ -177,16 +205,24 @@ const submit = () => {
                     <label
                         for="langue_id"
                         class="mb-2 block font-medium text-gray-700"
-                        >Langue ID</label
+                        >Langue</label
                     >
-                    <input
-                        type="text"
+                    <select
                         id="langue_id"
                         name="langue_id"
                         v-model="form.langue_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-                    />
+                    >
+                        <option value="">Sélectionnez une langue</option>
+                        <option
+                            v-for="langue in props.langues"
+                            :key="langue.id"
+                            :value="langue.id"
+                        >
+                            {{ langue.langue }}
+                        </option>
+                    </select>
                 </div>
                 <button
                     type="submit"

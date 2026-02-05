@@ -20,5 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('particuliers', App\Http\Controllers\ParticulierController::class);
 });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('professionnels', App\Http\Controllers\ProfessionnelController::class);
+});
 
 require __DIR__.'/settings.php';

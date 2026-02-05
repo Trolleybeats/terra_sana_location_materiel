@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UtilisateurSeeder::class,
             ParticulierSeeder::class,
+            PaysSeeder::class,
+            CommuneSeeder::class,
+            LangueSeeder::class,
+            ProfessionnelSeeder::class,
         ]);
     }
 }

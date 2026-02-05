@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pays extends Model
+class Langue extends Model
 {
-    /** @use HasFactory<\Database\Factories\PaysFactory> */
+    /** @use HasFactory<\Database\Factories\LangueFactory> */
     use HasFactory;
 
-    protected $fillable = ['nom_pays'];
+    protected $fillable = [
+        'langue',
+    ];
 
     public function particuliers()
     {
