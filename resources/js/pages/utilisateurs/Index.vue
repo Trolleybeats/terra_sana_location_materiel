@@ -49,7 +49,21 @@ defineProps<{
                         <tr
                             v-for="user in users"
                             :key="user.id"
-                            class="hover:bg-gray-50"
+                            @click="
+                                user.type_id === 1
+                                    ? $inertia.visit(`/particuliers/${user.id}`)
+                                    : user.type_id === 2
+                                      ? $inertia.visit(
+                                            `/professionnels/${user.id}`,
+                                        )
+                                      : null
+                            "
+                            :class="[
+                                'hover:bg-gray-50',
+                                user.type_id === 1 || user.type_id === 2
+                                    ? 'cursor-pointer'
+                                    : '',
+                            ]"
                         >
                             <td
                                 class="px-6 py-4 text-sm whitespace-nowrap text-gray-900"

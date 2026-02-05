@@ -63,6 +63,22 @@ class ParticulierController extends Controller
         return redirect()->route('utilisateurs.index');
     }
     /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $particulier = Particulier::where('user_id', $id)
+            ->with(['pays', 'langue'])
+            ->firstOrFail();
+        
+        // Charger les communes séparément car il y a deux relations
+        $particulier->load(['communeNom', 'communeNumero']);
+            
+        return Inertia::render('particuliers/Show', [
+            'particulier' => $particulier,
+        ]);
+    }
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)

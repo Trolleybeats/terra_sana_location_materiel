@@ -82,7 +82,16 @@ class ProfessionnelController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $professionnel = Professionnel::where('user_id', $id)
+            ->with(['pays', 'langue'])
+            ->firstOrFail();
+        
+        // Charger les communes
+        $professionnel->load(['communeSiegeNom', 'communeSiegeNumero', 'communeLivraisonNom', 'communeLivraisonNumero']);
+            
+        return Inertia::render('professionnels/Show', [
+            'professionnel' => $professionnel,
+        ]);
     }
 
     /**
