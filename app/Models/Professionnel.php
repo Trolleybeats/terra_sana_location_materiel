@@ -38,10 +38,27 @@ class Professionnel extends Model
     {
         return $this->belongsTo(Pays::class);
     }
-    public function commune()
+
+    public function communeSiegeNom()
     {
-        return $this->belongsTo(Commune::class, 'nom_commune_id' && 'numero_commune_id');
+        return $this->belongsTo(Commune::class, 'nom_commune_siege_id');
     }
+
+    public function communeSiegeNumero()
+    {
+        return $this->belongsTo(Commune::class, 'numero_commune_siege_id');
+    }
+
+    public function communeLivraisonNom()
+    {
+        return $this->belongsTo(Commune::class, 'nom_commune_livraison_id');
+    }
+
+    public function communeLivraisonNumero()
+    {
+        return $this->belongsTo(Commune::class, 'numero_commune_livraison_id');
+    }
+
     public function langue()
     {
         return $this->belongsTo(Langue::class);

@@ -36,9 +36,14 @@ class Particulier extends Model
         return $this->belongsTo(Pays::class);
     }
 
-    public function commune(): BelongsTo
+    public function communeNom(): BelongsTo
     {
-        return $this->belongsTo(Commune::class, 'nom_commune_id' && 'numero_commune_id');
+        return $this->belongsTo(Commune::class, 'nom_commune_id');
+    }
+
+    public function communeNumero(): BelongsTo
+    {
+        return $this->belongsTo(Commune::class, 'numero_commune_id');
     }
 
     public function langue(): BelongsTo
