@@ -47,8 +47,14 @@ class UtilisateurController extends Controller
         if ($newUser->type_id == 1) {
             return redirect()->route('particuliers.create', ['user_id' => $newUser->id]);
         }
-        
+        // Si c'est un professionnel, rediriger vers le formulaire de création de professionnel
+        elseif ($newUser->type_id == 2) {
+            return redirect()->route('professionnels.create', ['user_id' => $newUser->id]);
+        }
+        else {
+            // Pour l'administrateur ou autres types, rediriger vers la liste des utilisateurs
         return redirect()->route('utilisateurs.index');
+    }
     }
 
     /**

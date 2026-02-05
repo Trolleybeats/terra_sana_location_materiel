@@ -59,4 +59,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Particulier::class);
     }
+    /**
+     * Get the professionnel associated with the user.
+     */
+    public function professionnel(): HasOne
+    {
+        return $this->hasOne(Professionnel::class);
+    }
 }
