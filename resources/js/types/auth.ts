@@ -10,6 +10,28 @@ export type User = {
     [key: string]: unknown;
 };
 
+export type Commune = {
+    id: number;
+    nom_commune: string;
+    numero_commune: number;
+    created_at: string;
+    updated_at: string;
+};
+
+export type Langue = {
+    id: number;
+    langue: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type Pays = {
+    id: number;
+    nom_pays: string;
+    created_at: string;
+    updated_at: string;
+};
+
 export type Particulier = {
     id: number;
     user_id: number;
@@ -45,6 +67,13 @@ export type Professionnel = {
     langue_id: number;
     created_at: string;
     updated_at: string;
+    // Relations
+    commune_siege_numero?: Commune;
+    commune_siege_nom?: Commune;
+    commune_livraison_numero?: Commune;
+    commune_livraison_nom?: Commune;
+    pays?: Pays;
+    langue?: Langue;
 };
 
 export type Auth = {

@@ -99,7 +99,12 @@ class ProfessionnelController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('professionnels/Edit', [
+            'professionnel' => Professionnel::findOrFail($id),
+            'pays' => Pays::all(),
+            'communes' => Commune::all(),
+            'langues' => Langue::all(),
+        ]);
     }
 
     /**
@@ -107,7 +112,42 @@ class ProfessionnelController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nom_societe' => 'required|string|max:255',
+            'nom_rue_siege' => 'required|string|max:255',
+            'numero_rue_siege' => 'required|integer',
+            'nom_commune_siege_id' => 'required|integer',
+            'numero_commune_siege_id' => 'required|integer',
+            'nom_rue_livraison' => 'required|string|max:255',
+            'numero_rue_livraison' => 'required|integer',
+            'nom_commune_livraison_id' => 'required|integer',
+            'numero_commune_livraison_id' => 'required|integer',
+            'pays_id' => 'required|integer',
+            'heure_ouverture' => 'required|integer',
+            'minute_ouverture' => 'required|integer',
+            'heure_fermeture' => 'required|integer',
+            'minute_fermeture' => 'required|integer',
+            'langue_id' => 'required|integer',
+        ]);
+        $professionnel = Professionnel::findOrFail($id);
+        $professionnel->update([
+            'nom_societe' => $request->nom_societe,
+            'nom_rue_siege' => $request->nom_rue_siege,
+            'numero_rue_siege' => $request->numero_rue_siege,
+            'nom_commune_siege_id' => $request->nom_commune_siege_id,
+            'numero_commune_siege_id' => $request->numero_commune_siege_id,
+            'nom_rue_livraison' => $request->nom_rue_livraison,
+            'numero_rue_livraison' => $request->numero_rue_livraison,
+            'nom_commune_livraison_id' => $request->nom_commune_livraison_id,
+            'numero_commune_livraison_id' => $request->numero_commune_livraison_id,
+            'pays_id' => $request->pays_id,
+            'heure_ouverture' => $request->heure_ouverture,
+            'minute_ouverture' => $request->minute_ouverture,
+            'heure_fermeture' => $request->heure_fermeture,
+            'minute_fermeture' => $request->minute_fermeture,
+            'langue_id' => $request->langue_id,
+        ]);
+        return redirect()->route('professionnels.show', $professionnel->user_id);
     }
 
     /**
@@ -115,6 +155,17 @@ class ProfessionnelController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $professionnel = Professionnel::findOrFail($id);
+        $user = $professionnel->user;
+        
+        // Supprimer le professionnel d'abord
+        $professionnel->delete();
+        
+        // Puis supprimer l'utilisateur associé
+        if ($user) {
+            $user->delete();
+        }
+        
+        return redirect()->route('utilisateurs.index')->with('success', 'Professionnel et utilisateur supprimés avec succès.');
     }
 }

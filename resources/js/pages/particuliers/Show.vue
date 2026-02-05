@@ -1,6 +1,43 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { Particulier } from '@/types';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const deleteDialog = ref(false);
+const particulierToDelete = ref<Particulier | null>(null);
+
+const openDeleteDialog = (particulier: Particulier) => {
+    particulierToDelete.value = particulier;
+    deleteDialog.value = true;
+};
+
+const deleteParticulier = () => {
+    if (particulierToDelete.value) {
+        router.delete(`/particuliers/${particulierToDelete.value.id}`, {
+            onSuccess: () => {
+                deleteDialog.value = false;
+                particulierToDelete.value = null;
+            },
+            onError: (errors) => {
+                // Gérer les erreurs si nécessaire
+                console.error(
+                    'Erreur lors de la suppression du particulier.',
+                    errors,
+                );
+            },
+        });
+    }
+};
 
 defineProps<{
     particulier: Particulier;
@@ -35,6 +72,49 @@ defineProps<{
                     <strong>Langue:</strong> {{ particulier.langue?.langue }}
                 </p>
             </div>
+            <button
+                class="mt-6 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                @click="$inertia.visit(`/particuliers/${particulier.id}/edit`)"
+            >
+                Modifier le Particulier
+            </button>
+            <button
+                class="mt-6 ml-4 rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+                @click="openDeleteDialog(particulier)"
+            >
+                Supprimer le Particulier
+            </button>
         </section>
+        <!-- Dialog de confirmation de suppression -->
+        <Dialog v-model:open="deleteDialog">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Confirmer la suppression</DialogTitle>
+                    <DialogDescription>
+                        Êtes-vous sûr de vouloir supprimer "{{
+                            particulierToDelete?.nom
+                        }}
+                        {{ particulierToDelete?.prenom }}" ? Cette action est
+                        irréversible.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="deleteDialog = false"
+                    >
+                        Annuler
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        @click="deleteParticulier"
+                    >
+                        Supprimer
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </AppLayout>
 </template>

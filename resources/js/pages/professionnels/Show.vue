@@ -1,6 +1,43 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { Professionnel } from '@/types';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const deleteDialog = ref(false);
+const professionnelToDelete = ref<Professionnel | null>(null);
+
+const openDeleteDialog = (professionnel: Professionnel) => {
+    professionnelToDelete.value = professionnel;
+    deleteDialog.value = true;
+};
+
+const deleteProfessionnel = () => {
+    if (professionnelToDelete.value) {
+        router.delete(`/professionnels/${professionnelToDelete.value.id}`, {
+            onSuccess: () => {
+                deleteDialog.value = false;
+                professionnelToDelete.value = null;
+            },
+            onError: (errors) => {
+                // Gérer les erreurs si nécessaire
+                console.error(
+                    'Erreur lors de la suppression du professionnel.',
+                    errors,
+                );
+            },
+        });
+    }
+};
 
 defineProps<{
     professionnel: Professionnel;
@@ -47,6 +84,49 @@ defineProps<{
                     <strong>Langue:</strong> {{ professionnel.langue?.langue }}
                 </p>
             </div>
+            <button
+                class="mt-6 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                @click="
+                    $inertia.visit(`/professionnels/${professionnel.id}/edit`)
+                "
+            >
+                Modifier le Professionnel
+            </button>
+            <button
+                class="mt-6 ml-4 rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+                @click="openDeleteDialog(professionnel)"
+            >
+                Supprimer le Professionnel
+            </button>
         </section>
+        <!-- Dialog de confirmation de suppression -->
+        <Dialog v-model:open="deleteDialog">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Confirmer la suppression</DialogTitle>
+                    <DialogDescription>
+                        Êtes-vous sûr de vouloir supprimer "{{
+                            professionnelToDelete?.nom_societe
+                        }}" ? Cette action est irréversible.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="deleteDialog = false"
+                    >
+                        Annuler
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        @click="deleteProfessionnel"
+                    >
+                        Supprimer
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </AppLayout>
 </template>
