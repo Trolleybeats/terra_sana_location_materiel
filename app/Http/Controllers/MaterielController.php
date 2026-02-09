@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categorie_materiel;
 use App\Models\Materiel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,12 +12,28 @@ class MaterielController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $materiels = Materiel::with('categorie')->get();
+        $query = Materiel::with('categorie');
+
+        if ($request->filled('categorie')) {
+            $query->where('categorie_id', $request->input('categorie'));
+        }
+
+        if ($request->filled('prix')) {
+            match ($request->input('prix')) {
+                '0-50' => $query->whereBetween('prix_journalier', [0, 50]),
+                '50-100' => $query->whereBetween('prix_journalier', [50, 100]),
+                '100-200' => $query->whereBetween('prix_journalier', [100, 200]),
+                '200+' => $query->where('prix_journalier', '>=', 200),
+                default => null,
+            };
+        }
 
         return Inertia::render('materiels/Index', [
-            'materiels' => $materiels,
+            'materiels' => $query->get(),
+            'categories' => Categorie_materiel::all(),
+            'filters' => $request->only(['categorie', 'prix']),
         ]);
     }
 
