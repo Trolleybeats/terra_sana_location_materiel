@@ -35,6 +35,12 @@ function resetFilters() {
     <AppLayout>
         <section class="container mx-auto px-4 py-8">
             <h1 class="mb-6 text-3xl font-bold">Matériels</h1>
+            <button
+                class="mb-4 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+                @click="$inertia.visit('/materiels/create')"
+            >
+                Ajouter un matériel
+            </button>
             <p>Liste des matériels disponibles à la location.</p>
 
             <!--Filtre de recherche-->
@@ -150,7 +156,7 @@ function resetFilters() {
                             {{ materiel.prix_journalier }} €
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            {{ materiel.dimensions }}
+                            {{ materiel.dimensions }} cm
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ materiel.stock_total }}
