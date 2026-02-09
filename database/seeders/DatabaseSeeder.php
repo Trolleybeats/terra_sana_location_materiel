@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
             CommuneSeeder::class,
             LangueSeeder::class,
             ProfessionnelSeeder::class,
+            FonctionSeeder::class,
+            ContactProSeeder::class,
+            CategorieMaterielSeeder::class,
+            MaterielSeeder::class,
         ]);
     }
 }

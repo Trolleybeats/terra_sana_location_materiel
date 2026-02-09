@@ -41,6 +41,16 @@ const deleteProfessionnel = () => {
 
 defineProps<{
     professionnel: Professionnel;
+    contact_pros: Array<{
+        id: number;
+        prenom: string;
+        nom: string;
+        email?: string;
+        telephone?: string;
+        fonction?: {
+            fonction: string;
+        } | null;
+    }>;
 }>();
 </script>
 
@@ -49,6 +59,9 @@ defineProps<{
         <section class="container mx-auto px-4 py-8">
             <h1 class="mb-6 text-3xl font-bold">Détails du Professionnel</h1>
             <div class="rounded-lg bg-white p-6 shadow-md">
+                <h2 class="mb-4 text-2xl font-semibold text-gray-800">
+                    {{ professionnel.nom_societe }}
+                </h2>
                 <p class="mb-4"><strong>ID:</strong> {{ professionnel.id }}</p>
                 <p class="mb-4">
                     <strong>Nom de la Société:</strong>
@@ -98,6 +111,49 @@ defineProps<{
             >
                 Supprimer le Professionnel
             </button>
+            <div class="mt-6">
+                <h2 class="mb-4 text-2xl font-semibold text-gray-800">
+                    Contacts Professionnels
+                </h2>
+                <div
+                    v-if="contact_pros && contact_pros.length > 0"
+                    class="space-y-4"
+                >
+                    <div
+                        v-for="contact in contact_pros"
+                        :key="contact.id"
+                        class="rounded-lg bg-gray-50 p-4"
+                    >
+                        <p class="mb-2">
+                            <strong>Nom:</strong> {{ contact.prenom }}
+                            {{ contact.nom }}
+                        </p>
+                        <p v-if="contact.fonction" class="mb-2">
+                            <strong>Fonction:</strong>
+                            {{ contact.fonction.fonction }}
+                        </p>
+                        <p v-if="contact.email" class="mb-2">
+                            <strong>Email:</strong>
+                            <a
+                                :href="`mailto:${contact.email}`"
+                                class="text-blue-600 hover:underline"
+                                >{{ contact.email }}</a
+                            >
+                        </p>
+                        <p v-if="contact.telephone" class="mb-2">
+                            <strong>Téléphone:</strong>
+                            <a
+                                :href="`tel:${contact.telephone}`"
+                                class="text-blue-600 hover:underline"
+                                >{{ contact.telephone }}</a
+                            >
+                        </p>
+                    </div>
+                </div>
+                <p v-else class="text-gray-500">
+                    Aucun contact professionnel enregistré.
+                </p>
+            </div>
         </section>
         <!-- Dialog de confirmation de suppression -->
         <Dialog v-model:open="deleteDialog">
