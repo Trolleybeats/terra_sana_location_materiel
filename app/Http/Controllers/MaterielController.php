@@ -96,6 +96,9 @@ class MaterielController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $materiel = Materiel::findOrFail($id);
+        $materiel->delete();
+
+        return redirect()->route('materiels.index')->with('success', 'Matériel supprimé avec succès.');
     }
 }

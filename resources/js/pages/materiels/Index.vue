@@ -1,7 +1,21 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
+import DropdownMenu from '@/components/ui/dropdown-menu/DropdownMenu.vue';
+import DropdownMenuContent from '@/components/ui/dropdown-menu/DropdownMenuContent.vue';
+import DropdownMenuItem from '@/components/ui/dropdown-menu/DropdownMenuItem.vue';
+import DropdownMenuLabel from '@/components/ui/dropdown-menu/DropdownMenuLabel.vue';
+import DropdownMenuTrigger from '@/components/ui/dropdown-menu/DropdownMenuTrigger.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { router } from '@inertiajs/vue3';
-import { reactive, watch } from 'vue';
+import { reactive, watch, ref } from 'vue';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 
 const props = defineProps<{
     materiels: any[];
@@ -30,6 +44,32 @@ function resetFilters() {
     form.prix = '';
     applyFilters();
 }
+
+const deleteDialog = ref(false);
+const materielToDelete = ref<number | null>(null);
+
+function openDeleteDialog(id: number) {
+    materielToDelete.value = id;
+    deleteDialog.value = true;
+}
+
+const deleteMateriel = () => {
+    if (materielToDelete.value) {
+        router.delete(`/materiels/${materielToDelete.value}`, {
+            onSuccess: () => {
+                deleteDialog.value = false;
+                materielToDelete.value = null;
+            },
+            onError: (errors) => {
+                // Gérer les erreurs si nécessaire
+                console.error(
+                    'Erreur lors de la suppression du matériel.',
+                    errors,
+                );
+            },
+        });
+    }
+};
 </script>
 <template>
     <AppLayout>
@@ -132,6 +172,11 @@ function resetFilters() {
                         >
                             Stock disponible
                         </th>
+                        <th
+                            class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                        >
+                            Actions
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
@@ -164,9 +209,55 @@ function resetFilters() {
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ materiel.stock_disponible }}
                         </td>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger @click.prevent>
+                                <Button variant="outline" size="sm">
+                                    •••
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>
+                                    Actions pour {{ materiel.nom }}
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    @click="openDeleteDialog(materiel.id)"
+                                >
+                                    Supprimer
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </tr>
                 </tbody>
             </table>
         </section>
+        <!-- Dialog de confirmation de suppression -->
+        <Dialog v-model:open="deleteDialog">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Confirmer la suppression</DialogTitle>
+                    <DialogDescription>
+                        Êtes-vous sûr de vouloir supprimer "{{
+                            materielToDelete?.nom
+                        }}" ? Cette action est irréversible.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="deleteDialog = false"
+                    >
+                        Annuler
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        @click="deleteMateriel"
+                    >
+                        Supprimer
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </AppLayout>
 </template>
