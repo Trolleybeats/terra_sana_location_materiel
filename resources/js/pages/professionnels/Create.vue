@@ -121,6 +121,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.nom_societe"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom_societe }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -136,6 +142,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.nom_rue_siege"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom_rue_siege }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -151,6 +163,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.numero_rue_siege"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.numero_rue_siege }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -175,6 +193,12 @@ const updateCodePostalLivraison = () => {
                             {{ commune.nom_commune }}
                         </option>
                     </select>
+                    <div
+                        v-if="form.errors.nom_commune_siege_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom_commune_siege_id }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -206,6 +230,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.nom_rue_livraison"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom_rue_livraison }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -221,6 +251,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.numero_rue_livraison"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.numero_rue_livraison }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -245,6 +281,12 @@ const updateCodePostalLivraison = () => {
                             {{ commune.nom_commune }}
                         </option>
                     </select>
+                    <div
+                        v-if="form.errors.nom_commune_livraison_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom_commune_livraison_id }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -284,6 +326,12 @@ const updateCodePostalLivraison = () => {
                             {{ pays.nom_pays }}
                         </option>
                     </select>
+                    <div
+                        v-if="form.errors.pays_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.pays_id }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -301,6 +349,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.heure_ouverture"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.heure_ouverture }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -318,6 +372,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.minute_ouverture"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.minute_ouverture }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -335,6 +395,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.heure_fermeture"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.heure_fermeture }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -352,6 +418,12 @@ const updateCodePostalLivraison = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div
+                        v-if="form.errors.minute_fermeture"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.minute_fermeture }}
+                    </div>
                 </div>
                 <div class="mb-4">
                     <label
@@ -375,6 +447,12 @@ const updateCodePostalLivraison = () => {
                             {{ langue.langue }}
                         </option>
                     </select>
+                    <div
+                        v-if="form.errors.langue_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.langue_id }}
+                    </div>
                 </div>
                 <button
                     type="submit"

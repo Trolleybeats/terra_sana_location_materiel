@@ -92,6 +92,9 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div v-if="form.errors.nom" class="mt-1 text-sm text-red-500">
+                        {{ form.errors.nom }}
+                        </div>  
                 </div>
                 <div>
                     <label
@@ -107,6 +110,9 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div v-if="form.errors.prenom" class="mt-1 text-sm text-red-500">
+                        {{ form.errors.prenom }}
+                        </div>
                 </div>
                 <div>
                     <label
@@ -122,6 +128,9 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div v-if="form.errors.nom_rue" class="mt-1 text-sm text-red-500">
+                        {{ form.errors.nom_rue }}
+                        </div>
                 </div>
                 <div>
                     <label
@@ -137,6 +146,9 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+                    <div v-if="form.errors.numero_rue" class="mt-1 text-sm text-red-500">
+                        {{ form.errors.numero_rue }}
+                        </div>
                 </div>
                 <div>
                     <label
@@ -161,7 +173,9 @@ const submit = () => {
                             {{ commune.nom_commune }}
                         </option>
                     </select>
-                </div>
+                    <div v-if="form.errors.nom_commune_id" class="mt-1 text-sm text-red-500">
+                        {{ form.errors.nom_commune_id }}
+                        </div>
                 <div>
                     <label
                         for="numero_commune_id"
@@ -200,6 +214,9 @@ const submit = () => {
                             {{ pays.nom_pays }}
                         </option>
                     </select>
+                    <div v-if="form.errors.pays_id" class="mt-1 text-sm text-red-500">
+                        {{ form.errors.pays_id }}
+                        </div>
                 </div>
                 <div>
                     <label
@@ -223,6 +240,9 @@ const submit = () => {
                             {{ langue.langue }}
                         </option>
                     </select>
+                    <div v-if="form.errors.langue_id" class="mt-1 text-sm text-red-500">
+                        {{ form.errors.langue_id }}
+                        </div>
                 </div>
                 <button
                     type="submit"

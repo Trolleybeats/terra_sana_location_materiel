@@ -63,4 +63,9 @@ class Professionnel extends Model
     {
         return $this->belongsTo(Langue::class);
     }
+
+    public function contactPros()
+    {
+        return $this->hasMany(Contact_pro::class);
+    }
 }

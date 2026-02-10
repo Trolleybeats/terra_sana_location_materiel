@@ -56,7 +56,7 @@ class ProfessionnelController extends Controller
             'minute_fermeture' => 'required|integer',
             'langue_id' => 'required|integer',
         ]);
-        Professionnel::create([
+        $professionnel = Professionnel::create([
             'user_id' => $request->user_id,
             'nom_societe' => $request->nom_societe,
             'nom_rue_siege' => $request->nom_rue_siege,
@@ -74,7 +74,8 @@ class ProfessionnelController extends Controller
             'minute_fermeture' => $request->minute_fermeture,
             'langue_id' => $request->langue_id,
         ]);
-        return redirect()->route('utilisateurs.index');
+        
+        return redirect()->route('contact_pro.create', ['professionnel_id' => $professionnel->id])->with('success', 'Professionnel créé avec succès. Veuillez ajouter un contact professionnel.');
     }
 
     /**
@@ -83,7 +84,7 @@ class ProfessionnelController extends Controller
     public function show(string $id)
     {
         $professionnel = Professionnel::where('user_id', $id)
-            ->with(['pays', 'langue'])
+            ->with(['pays', 'langue', 'contactPros.fonction'])
             ->firstOrFail();
         
         // Charger les communes
@@ -91,6 +92,7 @@ class ProfessionnelController extends Controller
             
         return Inertia::render('professionnels/Show', [
             'professionnel' => $professionnel,
+            'contact_pros' => $professionnel->contactPros,
         ]);
     }
 
