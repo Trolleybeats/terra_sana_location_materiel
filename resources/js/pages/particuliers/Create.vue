@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
 import { useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const props = defineProps({
     user_id: {
@@ -43,6 +44,14 @@ const updateCodePostal = () => {
         form.numero_commune_id = selectedCommune.id;
     }
 };
+
+// Propriété computed pour afficher le code postal
+const codePostal = computed(() => {
+    const selectedCommune = props.communes.find(
+        (commune) => commune.id === form.nom_commune_id,
+    );
+    return selectedCommune ? selectedCommune.numero_commune : '';
+});
 
 const submit = () => {
     form.post('/particuliers', {
@@ -92,9 +101,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-                    <div v-if="form.errors.nom" class="mt-1 text-sm text-red-500">
+                    <div
+                        v-if="form.errors.nom"
+                        class="mt-1 text-sm text-red-500"
+                    >
                         {{ form.errors.nom }}
-                        </div>  
+                    </div>
                 </div>
                 <div>
                     <label
@@ -110,9 +122,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-                    <div v-if="form.errors.prenom" class="mt-1 text-sm text-red-500">
+                    <div
+                        v-if="form.errors.prenom"
+                        class="mt-1 text-sm text-red-500"
+                    >
                         {{ form.errors.prenom }}
-                        </div>
+                    </div>
                 </div>
                 <div>
                     <label
@@ -128,9 +143,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-                    <div v-if="form.errors.nom_rue" class="mt-1 text-sm text-red-500">
+                    <div
+                        v-if="form.errors.nom_rue"
+                        class="mt-1 text-sm text-red-500"
+                    >
                         {{ form.errors.nom_rue }}
-                        </div>
+                    </div>
                 </div>
                 <div>
                     <label
@@ -146,9 +164,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-                    <div v-if="form.errors.numero_rue" class="mt-1 text-sm text-red-500">
+                    <div
+                        v-if="form.errors.numero_rue"
+                        class="mt-1 text-sm text-red-500"
+                    >
                         {{ form.errors.numero_rue }}
-                        </div>
+                    </div>
                 </div>
                 <div>
                     <label
@@ -173,20 +194,24 @@ const submit = () => {
                             {{ commune.nom_commune }}
                         </option>
                     </select>
-                    <div v-if="form.errors.nom_commune_id" class="mt-1 text-sm text-red-500">
+                    <div
+                        v-if="form.errors.nom_commune_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
                         {{ form.errors.nom_commune_id }}
-                        </div>
+                    </div>
+                </div>
                 <div>
                     <label
-                        for="numero_commune_id"
+                        for="code_postal"
                         class="mb-2 block font-medium text-gray-700"
                         >Code postal</label
                     >
                     <input
                         type="number"
-                        id="numero_commune_id"
-                        name="numero_commune_id"
-                        v-model="form.numero_commune_id"
+                        id="code_postal"
+                        name="code_postal"
+                        :value="codePostal"
                         required
                         readonly
                         class="w-full cursor-not-allowed rounded border border-gray-300 bg-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
@@ -214,9 +239,12 @@ const submit = () => {
                             {{ pays.nom_pays }}
                         </option>
                     </select>
-                    <div v-if="form.errors.pays_id" class="mt-1 text-sm text-red-500">
+                    <div
+                        v-if="form.errors.pays_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
                         {{ form.errors.pays_id }}
-                        </div>
+                    </div>
                 </div>
                 <div>
                     <label
@@ -240,9 +268,12 @@ const submit = () => {
                             {{ langue.langue }}
                         </option>
                     </select>
-                    <div v-if="form.errors.langue_id" class="mt-1 text-sm text-red-500">
+                    <div
+                        v-if="form.errors.langue_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
                         {{ form.errors.langue_id }}
-                        </div>
+                    </div>
                 </div>
                 <button
                     type="submit"
