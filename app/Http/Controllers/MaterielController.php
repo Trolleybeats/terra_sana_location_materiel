@@ -80,7 +80,12 @@ class MaterielController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $materiel = Materiel::findOrFail($id);
+
+        return Inertia::render('materiels/Edit', [
+            'materiel' => $materiel,
+            'categories' => Categorie_materiel::all(),
+        ]);
     }
 
     /**
@@ -88,7 +93,20 @@ class MaterielController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $materiel = Materiel::findOrFail($id);
+
+        $validated = $request->validate([
+            'categorie_id' => 'required|exists:categorie_materiels,id',
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'prix_journalier' => 'required|numeric|min:0',
+            'dimensions' => 'nullable|string|max:255',
+            'stock_total' => 'required|integer|min:0',
+            'stock_disponible' => 'required|integer|min:0|max:' . $request->input('stock_total'),
+        ]);
+
+        $materiel->update($validated);
+        return redirect()->route('materiels.index')->with('success', 'Matériel mis à jour avec succès.');
     }
 
     /**
