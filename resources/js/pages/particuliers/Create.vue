@@ -8,6 +8,18 @@ const props = defineProps({
         type: [String, Number],
         default: '',
     },
+    pays: {
+        type: Array,
+        default: () => [],
+    },
+    communes: {
+        type: Array,
+        default: () => [],
+    },
+    langues: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const form = useForm({
@@ -163,13 +175,13 @@ const submit = () => {
                     <label
                         for="nom_commune_id"
                         class="mb-2 block font-medium text-gray-700"
-                        >Nom de la commune ID</label
+                        >Nom de la commune</label
                     >
-                    <input
-                        type="text"
+                    <select
                         id="nom_commune_id"
                         name="nom_commune_id"
                         v-model="form.nom_commune_id"
+                        @change="updateCodePostal"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     >
@@ -193,7 +205,7 @@ const submit = () => {
                     <label
                         for="code_postal"
                         class="mb-2 block font-medium text-gray-700"
-                        >Numéro de la commune ID</label
+                        >Code postal</label
                     >
                     <input
                         type="number"
@@ -201,17 +213,17 @@ const submit = () => {
                         name="code_postal"
                         :value="codePostal"
                         required
-                        class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                        readonly
+                        class="w-full cursor-not-allowed rounded border border-gray-300 bg-gray-100 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
                 </div>
                 <div>
                     <label
                         for="pays_id"
                         class="mb-2 block font-medium text-gray-700"
-                        >Pays ID</label
+                        >Pays</label
                     >
-                    <input
-                        type="text"
+                    <select
                         id="pays_id"
                         name="pays_id"
                         v-model="form.pays_id"
@@ -238,10 +250,9 @@ const submit = () => {
                     <label
                         for="langue_id"
                         class="mb-2 block font-medium text-gray-700"
-                        >Langue ID</label
+                        >Langue</label
                     >
-                    <input
-                        type="text"
+                    <select
                         id="langue_id"
                         name="langue_id"
                         v-model="form.langue_id"

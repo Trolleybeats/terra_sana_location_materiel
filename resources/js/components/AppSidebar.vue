@@ -34,7 +34,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Matériel',
-        href: '#',
+        href: '/materiels',
         icon: Armchair,
     },
     {

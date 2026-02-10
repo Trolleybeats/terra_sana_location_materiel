@@ -20,5 +20,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('particuliers', App\Http\Controllers\ParticulierController::class);
 });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('professionnels', App\Http\Controllers\ProfessionnelController::class);
+});
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('materiels', App\Http\Controllers\MaterielController::class);
+});
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('contact_pro', App\Http\Controllers\ContactProController::class);
+});
 
 require __DIR__.'/settings.php';
