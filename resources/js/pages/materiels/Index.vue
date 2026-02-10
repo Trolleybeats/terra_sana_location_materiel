@@ -209,23 +209,36 @@ const deleteMateriel = () => {
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ materiel.stock_disponible }}
                         </td>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger @click.prevent>
-                                <Button variant="outline" size="sm">
-                                    •••
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuLabel>
-                                    Actions pour {{ materiel.nom }}
-                                </DropdownMenuLabel>
-                                <DropdownMenuItem
-                                    @click="openDeleteDialog(materiel.id)"
-                                >
-                                    Supprimer
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <td
+                            class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap"
+                        >
+                            <DropdownMenu>
+                                <DropdownMenuTrigger @click.prevent>
+                                    <Button variant="outline" size="sm">
+                                        •••
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuLabel>
+                                        Actions pour {{ materiel.nom }}
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuItem
+                                        @click="
+                                            $inertia.visit(
+                                                `/materiels/${materiel.id}/edit`,
+                                            )
+                                        "
+                                    >
+                                        Modifier
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        @click="openDeleteDialog(materiel.id)"
+                                    >
+                                        Supprimer
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </td>
                     </tr>
                 </tbody>
             </table>
