@@ -48,6 +48,12 @@ function submit() {
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         required
                     />
+                    <div
+                        v-if="form.errors.nom"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.nom }}
+                    </div>
                 </div>
 
                 <div>
@@ -62,6 +68,12 @@ function submit() {
                         rows="4"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     ></textarea>
+                    <div
+                        v-if="form.errors.description"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.description }}
+                    </div>
                 </div>
 
                 <div>
@@ -78,6 +90,12 @@ function submit() {
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         required
                     />
+                    <div
+                        v-if="form.errors.prix_journalier"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.prix_journalier }}
+                    </div>
                 </div>
 
                 <div>
@@ -103,6 +121,12 @@ function submit() {
                             {{ categorie.nom }}
                         </option>
                     </select>
+                    <div
+                        v-if="form.errors.categorie_id"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.categorie_id }}
+                    </div>
                 </div>
 
                 <div>
@@ -117,6 +141,12 @@ function submit() {
                         id="dimensions"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    <div
+                        v-if="form.errors.dimensions"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.dimensions }}
+                    </div>
                 </div>
 
                 <div>
@@ -132,6 +162,12 @@ function submit() {
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         required
                     />
+                    <div
+                        v-if="form.errors.stock_total"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.stock_total }}
+                    </div>
                 </div>
 
                 <div>
@@ -147,6 +183,12 @@ function submit() {
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         required
                     />
+                    <div
+                        v-if="form.errors.stock_disponible"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.stock_disponible }}
+                    </div>
                 </div>
 
                 <button

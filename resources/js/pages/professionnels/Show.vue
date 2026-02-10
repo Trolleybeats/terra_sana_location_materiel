@@ -15,10 +15,17 @@ import { ref } from 'vue';
 
 const deleteDialog = ref(false);
 const professionnelToDelete = ref<Professionnel | null>(null);
+const deleteContactProDialog = ref(false);
+const contactProToDelete = ref<number | null>(null);
 
 const openDeleteDialog = (professionnel: Professionnel) => {
     professionnelToDelete.value = professionnel;
     deleteDialog.value = true;
+};
+
+const openDeleteContactProDialog = (contactProId: number) => {
+    contactProToDelete.value = contactProId;
+    deleteContactProDialog.value = true;
 };
 
 const deleteProfessionnel = () => {
@@ -32,6 +39,24 @@ const deleteProfessionnel = () => {
                 // Gérer les erreurs si nécessaire
                 console.error(
                     'Erreur lors de la suppression du professionnel.',
+                    errors,
+                );
+            },
+        });
+    }
+};
+
+const deleteContactPro = () => {
+    if (contactProToDelete.value) {
+        router.delete(`/contact_pro/${contactProToDelete.value}`, {
+            onSuccess: () => {
+                deleteContactProDialog.value = false;
+                contactProToDelete.value = null;
+            },
+            onError: (errors) => {
+                // Gérer les erreurs si nécessaire
+                console.error(
+                    'Erreur lors de la suppression du contact professionnel.',
                     errors,
                 );
             },
@@ -103,18 +128,28 @@ defineProps<{
                     $inertia.visit(`/professionnels/${professionnel.id}/edit`)
                 "
             >
-                Modifier le Professionnel
+                Modifier la société
             </button>
             <button
                 class="mt-6 ml-4 rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
                 @click="openDeleteDialog(professionnel)"
             >
-                Supprimer le Professionnel
+                Supprimer la société
             </button>
             <div class="mt-6">
                 <h2 class="mb-4 text-2xl font-semibold text-gray-800">
                     Contacts Professionnels
                 </h2>
+                <button
+                    class="mb-4 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+                    @click="
+                        $inertia.visit(
+                            `/contact_pro/create?professionnel_id=${professionnel.id}`,
+                        )
+                    "
+                >
+                    Ajouter un contact professionnel
+                </button>
                 <div
                     v-if="contact_pros && contact_pros.length > 0"
                     class="space-y-4"
@@ -148,6 +183,24 @@ defineProps<{
                                 >{{ contact.telephone }}</a
                             >
                         </p>
+                        <div class="mt-4 flex gap-2">
+                            <button
+                                class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                                @click="
+                                    $inertia.visit(
+                                        `/contact_pro/${contact.id}/edit`,
+                                    )
+                                "
+                            >
+                                Modifier
+                            </button>
+                            <button
+                                class="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+                                @click="openDeleteContactProDialog(contact.id)"
+                            >
+                                Supprimer
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <p v-else class="text-gray-500">
@@ -178,6 +231,35 @@ defineProps<{
                         type="button"
                         variant="destructive"
                         @click="deleteProfessionnel"
+                    >
+                        Supprimer
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+
+        <!-- Dialog de confirmation de suppression pour les contacts professionnels -->
+        <Dialog v-model:open="deleteContactProDialog">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Confirmer la suppression</DialogTitle>
+                    <DialogDescription>
+                        Êtes-vous sûr de vouloir supprimer ce contact
+                        professionnel ? Cette action est irréversible.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="deleteContactProDialog = false"
+                    >
+                        Annuler
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        @click="deleteContactPro"
                     >
                         Supprimer
                     </Button>
