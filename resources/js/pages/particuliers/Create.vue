@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
 import { useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const props = defineProps({
     user_id: {
@@ -22,6 +23,27 @@ const form = useForm({
     langue_id: '',
 });
 
+<<<<<<< Updated upstream
+=======
+// Fonction pour mettre à jour automatiquement le code postal
+const updateCodePostal = () => {
+    const selectedCommune = props.communes.find(
+        (commune) => commune.id === form.nom_commune_id,
+    );
+    if (selectedCommune) {
+        form.numero_commune_id = selectedCommune.id;
+    }
+};
+
+// Propriété computed pour afficher le code postal
+const codePostal = computed(() => {
+    const selectedCommune = props.communes.find(
+        (commune) => commune.id === form.nom_commune_id,
+    );
+    return selectedCommune ? selectedCommune.numero_commune : '';
+});
+
+>>>>>>> Stashed changes
 const submit = () => {
     form.post('/particuliers', {
         onSuccess: () => {
@@ -70,6 +92,15 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+<<<<<<< Updated upstream
+=======
+                    <div
+                        v-if="form.errors.nom"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom }}
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -85,6 +116,15 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+<<<<<<< Updated upstream
+=======
+                    <div
+                        v-if="form.errors.prenom"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.prenom }}
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -100,6 +140,15 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+<<<<<<< Updated upstream
+=======
+                    <div
+                        v-if="form.errors.nom_rue"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom_rue }}
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -115,6 +164,15 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
+<<<<<<< Updated upstream
+=======
+                    <div
+                        v-if="form.errors.numero_rue"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.numero_rue }}
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -129,19 +187,45 @@ const submit = () => {
                         v-model="form.nom_commune_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+<<<<<<< Updated upstream
                     />
+=======
+                    >
+                        <option value="">Sélectionnez une commune</option>
+                        <option
+                            v-for="commune in props.communes"
+                            :key="commune.id"
+                            :value="commune.id"
+                        >
+                            {{ commune.nom_commune }}
+                        </option>
+                    </select>
+                    <div
+                        v-if="form.errors.nom_commune_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.nom_commune_id }}
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
-                        for="numero_commune_id"
+                        for="code_postal"
                         class="mb-2 block font-medium text-gray-700"
                         >Numéro de la commune ID</label
                     >
                     <input
+<<<<<<< Updated upstream
                         type="text"
                         id="numero_commune_id"
                         name="numero_commune_id"
                         v-model="form.numero_commune_id"
+=======
+                        type="number"
+                        id="code_postal"
+                        name="code_postal"
+                        :value="codePostal"
+>>>>>>> Stashed changes
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
@@ -159,7 +243,26 @@ const submit = () => {
                         v-model="form.pays_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+<<<<<<< Updated upstream
                     />
+=======
+                    >
+                        <option value="">Sélectionnez un pays</option>
+                        <option
+                            v-for="pays in props.pays"
+                            :key="pays.id"
+                            :value="pays.id"
+                        >
+                            {{ pays.nom_pays }}
+                        </option>
+                    </select>
+                    <div
+                        v-if="form.errors.pays_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.pays_id }}
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -174,7 +277,26 @@ const submit = () => {
                         v-model="form.langue_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+<<<<<<< Updated upstream
                     />
+=======
+                    >
+                        <option value="">Sélectionnez une langue</option>
+                        <option
+                            v-for="langue in props.langues"
+                            :key="langue.id"
+                            :value="langue.id"
+                        >
+                            {{ langue.langue }}
+                        </option>
+                    </select>
+                    <div
+                        v-if="form.errors.langue_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ form.errors.langue_id }}
+                    </div>
+>>>>>>> Stashed changes
                 </div>
                 <button
                     type="submit"
