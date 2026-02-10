@@ -1,7 +1,7 @@
 # 📋 Suivi du Projet - Terra Sana Location Matériel
 
-**Dernière mise à jour :** 5 février 2026  
-**Version :** 0.1.0 (Développement initial)  
+**Dernière mise à jour :** 10 février 2026  
+**Version :** 0.2.0 (Phase 1 en cours)  
 **Statut :** En cours de développement
 
 ---
@@ -55,6 +55,10 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - [x] Model Pays
 - [x] Model Commune
 - [x] Model Langue
+- [x] Model Materiel
+- [x] Model Categorie_materiel
+- [x] Model Contact_pro
+- [x] Model Fonction
 
 #### Factories & Seeders
 
@@ -64,20 +68,39 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - [x] PaysFactory
 - [x] CommuneFactory
 - [x] LangueFactory
+- [x] MaterielFactory
+- [x] CategorieMaterielFactory
+- [x] ContactProFactory
+- [x] FonctionFactory
 - [x] CommuneSeeder
+- [x] PaysSeeder
+- [x] LangueSeeder
+- [x] ParticulierSeeder
+- [x] ProfessionnelSeeder
+- [x] UtilisateurSeeder
+- [x] MaterielSeeder
+- [x] CategorieMaterielSeeder
+- [x] ContactProSeeder
+- [x] FonctionSeeder
 
 #### Contrôleurs
 
 - [x] UtilisateurController
 - [x] ParticulierController (CRUD)
 - [x] ProfessionnelController (CRUD)
+- [x] MaterielController (en cours)
+- [x] ContactProController
 
 #### Interface utilisateur
 
 - [x] Page d'accueil (Welcome)
 - [x] Dashboard
-- [x] Formulaire de création de particuliers
+- [x] Pages CRUD Particuliers (Create, Show, Edit)
+- [x] Pages CRUD Professionnels (Create, Show, Edit)
+- [x] Pages Utilisateurs (Index, Create)
+- [x] Pages Matériels (Index, Create - en cours)
 - [x] Système de navigation avec Inertia.js
+- [x] Layouts d'authentification multiples
 
 #### Configuration & Outils
 
@@ -92,6 +115,11 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 ## 🚧 En cours de développement
 
 ### Priorité haute
+
+- [ ] **Compléter le module Matériel**
+    - Pages Edit et Show pour les matériels
+    - Gestion des photos de matériel
+    - Interface de gestion des catégories
 
 - [ ] **Validation complète des formulaires**
     - Validation côté client (Vue.js)
@@ -114,13 +142,20 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 
 ## 📅 Fonctionnalités à venir
 
-### Phase 1 - Gestion du matériel (Planifiée)
+### Phase 1 - Gestion du matériel (En cours - Démarrée le 09/02/2026)
 
-- [ ] Modèle Matériel
-- [ ] Catégories de matériel
+- [x] Modèle Materiel
+- [x] Modèle Categorie_materiel
+- [x] Modèle Contact_pro
+- [x] Modèle Fonction
+- [x] Migrations et factories
+- [x] MaterielController de base
+- [x] Pages Index et Create pour matériels
+- [ ] Pages Edit et Show pour matériels
 - [ ] Gestion de l'inventaire
-- [ ] Photos et descriptions
-- [ ] État et maintenance du matériel
+- [ ] Upload et gestion des photos
+- [ ] Interface de gestion des catégories
+- [ ] Système d'état et maintenance du matériel
 
 ### Phase 2 - Système de location (Planifiée)
 
@@ -186,6 +221,13 @@ _Aucun bug critique identifié pour le moment_
 - numéro_tva
 - adresse complète (rue, numéro, commune, pays)
 - langue de communication
+- `contact_pros` : Contacts professionnels liés aux sociétés
+- `fonctions` : Fonctions des contacts professionnels
+
+#### Tables Matériel (Nouveau - Phase 1)
+
+- `materiels` : Inventaire du matériel
+- `categorie_materiels` : Catégories de matériel
 
 #### Tables de référence
 
@@ -200,6 +242,8 @@ _Aucun bug critique identifié pour le moment_
 - `/utilisateurs` - Gestion des utilisateurs (authentifié)
 - `/particuliers` - Gestion des particuliers (authentifié)
 - `/professionnels` - Gestion des professionnels (authentifié)
+- `/materiels` - Gestion des matériels (authentifié) **NOUVEAU**
+- `/contact_pro` - Gestion des contacts pros (authentifié) **NOUVEAU**
 - `/settings/*` - Paramètres utilisateur (authentifié)
 
 ---
@@ -297,11 +341,12 @@ php artisan view:cache
 
 ### Code
 
-- Contrôleurs : 4 (+ Settings)
-- Modèles : 6
-- Migrations : 9
-- Factories : 6
-- Routes : 3 groupes de ressources
+- Contrôleurs : 6 (+ Settings)
+- Modèles : 10
+- Migrations : 13
+- Factories : 10
+- Seeders : 11
+- Routes : 5 groupes de ressources
 
 ### Tests
 
@@ -313,7 +358,29 @@ php artisan view:cache
 
 ## ✏️ Journal des modifications
 
-### [Non versionnée] - 05/02/2026
+### [0.2.0] - 10/02/2026
+
+#### Ajouté
+
+- **Phase 1 démarrée** : Module de gestion du matériel
+- Modèles : Materiel, Categorie_materiel, Contact_pro, Fonction
+- Migrations pour les tables matériel
+- MaterielController et ContactProController
+- Factories : MaterielFactory, CategorieMaterielFactory, ContactProFactory, FonctionFactory
+- Seeders complets pour toutes les tables
+- Pages matériels (Index, Create)
+- Routes ressources pour matériels et contacts pros
+- Pages CRUD complètes pour Particuliers (Show, Edit)
+- Pages CRUD complètes pour Professionnels (Show, Edit)
+- Pages Utilisateurs (Index, Create)
+
+#### En cours
+
+- Complétion du CRUD matériels (Edit, Show)
+- Gestion des photos de matériel
+- Interface de gestion des catégories
+
+### [0.1.0] - 05/02/2026
 
 #### Ajouté
 
@@ -334,18 +401,22 @@ php artisan view:cache
 
 ## 🎯 Prochaines étapes immédiates
 
-1. **Compléter l'interface Particuliers**
-    - Pagination
+1. **Compléter le module Matériel**
+    - Pages Show et Edit pour les matériels
+    - Upload et gestion des photos
+    - Interface de gestion des catégories
+    - Pagination sur la liste des matériels
 
 2. **Améliorer l'UX**
     - Messages de succès/erreur
     - Loaders pendant les requêtes
     - Confirmations modales
+    - Pagination sur toutes les listes
 
-3. **Commencer le module Matériel**
-    - Définir la structure de données
+3. **Commencer la Phase 2 - Système de location**
+    - Définir le modèle de données pour les locations
     - Créer les migrations
-    - Développer le CRUD de base
+    - Développer le calendrier de disponibilité
 
 ---
 
