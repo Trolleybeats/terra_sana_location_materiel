@@ -23,8 +23,6 @@ const form = useForm({
     langue_id: '',
 });
 
-<<<<<<< Updated upstream
-=======
 // Fonction pour mettre à jour automatiquement le code postal
 const updateCodePostal = () => {
     const selectedCommune = props.communes.find(
@@ -43,7 +41,6 @@ const codePostal = computed(() => {
     return selectedCommune ? selectedCommune.numero_commune : '';
 });
 
->>>>>>> Stashed changes
 const submit = () => {
     form.post('/particuliers', {
         onSuccess: () => {
@@ -92,15 +89,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-<<<<<<< Updated upstream
-=======
                     <div
                         v-if="form.errors.nom"
                         class="mt-1 text-sm text-red-500"
                     >
                         {{ form.errors.nom }}
                     </div>
->>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -116,15 +110,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-<<<<<<< Updated upstream
-=======
                     <div
                         v-if="form.errors.prenom"
                         class="mt-1 text-sm text-red-500"
                     >
                         {{ form.errors.prenom }}
                     </div>
->>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -140,15 +131,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-<<<<<<< Updated upstream
-=======
                     <div
                         v-if="form.errors.nom_rue"
                         class="mt-1 text-sm text-red-500"
                     >
                         {{ form.errors.nom_rue }}
                     </div>
->>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -164,15 +152,12 @@ const submit = () => {
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
-<<<<<<< Updated upstream
-=======
                     <div
                         v-if="form.errors.numero_rue"
                         class="mt-1 text-sm text-red-500"
                     >
                         {{ form.errors.numero_rue }}
                     </div>
->>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -187,9 +172,6 @@ const submit = () => {
                         v-model="form.nom_commune_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-<<<<<<< Updated upstream
-                    />
-=======
                     >
                         <option value="">Sélectionnez une commune</option>
                         <option
@@ -206,7 +188,6 @@ const submit = () => {
                     >
                         {{ form.errors.nom_commune_id }}
                     </div>
->>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -215,17 +196,10 @@ const submit = () => {
                         >Numéro de la commune ID</label
                     >
                     <input
-<<<<<<< Updated upstream
-                        type="text"
-                        id="numero_commune_id"
-                        name="numero_commune_id"
-                        v-model="form.numero_commune_id"
-=======
                         type="number"
                         id="code_postal"
                         name="code_postal"
                         :value="codePostal"
->>>>>>> Stashed changes
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     />
@@ -243,9 +217,6 @@ const submit = () => {
                         v-model="form.pays_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-<<<<<<< Updated upstream
-                    />
-=======
                     >
                         <option value="">Sélectionnez un pays</option>
                         <option
@@ -262,7 +233,6 @@ const submit = () => {
                     >
                         {{ form.errors.pays_id }}
                     </div>
->>>>>>> Stashed changes
                 </div>
                 <div>
                     <label
@@ -277,9 +247,6 @@ const submit = () => {
                         v-model="form.langue_id"
                         required
                         class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-<<<<<<< Updated upstream
-                    />
-=======
                     >
                         <option value="">Sélectionnez une langue</option>
                         <option
@@ -296,7 +263,6 @@ const submit = () => {
                     >
                         {{ form.errors.langue_id }}
                     </div>
->>>>>>> Stashed changes
                 </div>
                 <button
                     type="submit"
