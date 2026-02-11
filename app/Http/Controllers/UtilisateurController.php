@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,20 +25,24 @@ class UtilisateurController extends Controller
      */
     public function create()
     {
-        return Inertia::render('utilisateurs/Create');
+        $types = Type::all();
+        return Inertia::render('utilisateurs/Create', [
+            'types' => $types,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(User $user, Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'type_id' => 'required|integer',
         ]);
-        $newUser = $user->create([
+        
+        $newUser = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'type_id' => $request->type_id,
@@ -50,11 +55,10 @@ class UtilisateurController extends Controller
         // Si c'est un professionnel, rediriger vers le formulaire de création de professionnel
         elseif ($newUser->type_id == 2) {
             return redirect()->route('professionnels.create', ['user_id' => $newUser->id]);
-        }
-        else {
+        } else {
             // Pour l'administrateur ou autres types, rediriger vers la liste des utilisateurs
-        return redirect()->route('utilisateurs.index');
-    }
+            return redirect()->route('utilisateurs.index');
+        }
     }
 
     /**

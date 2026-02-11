@@ -3,10 +3,14 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { useForm } from '@inertiajs/vue3';
 
+const props = defineProps({
+    types: Array,
+});
+
 const form = useForm({
     email: '',
     password: '',
-    type_id: '1',
+    type_id: '',
 });
 
 const submit = () => {
@@ -70,9 +74,14 @@ const submit = () => {
                         required
                         class="w-full cursor-pointer rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
                     >
-                        <option value="1">Particulier</option>
-                        <option value="2">Professionnel</option>
-                        <option value="3">Administrateur</option>
+                        <option value="" disabled>Choisissez un type</option>
+                        <option
+                            v-for="type in types"
+                            :key="type.id"
+                            :value="type.id"
+                        >
+                            {{ type.type }}
+                        </option>
                     </select>
                 </div>
                 <div>
