@@ -24,4 +24,9 @@ class Materiel extends Model
     {
         return $this->belongsTo(Categorie_materiel::class, 'categorie_id');
     }
+
+    public function detailsCommandes()
+    {
+        return $this->hasMany(Details_commande::class, 'materiel_id');
+    }
 }
