@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('numero_commande')->unique();
+            $table->string('numero_commande')->unique()->startingValue('CMD');
             $table->date('date_debut')->nullable();
             $table->date('date_fin')->nullable();
             $table->timestamp('date_commande')->useCurrent();

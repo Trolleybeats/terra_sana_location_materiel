@@ -248,7 +248,11 @@ class CommandeController extends Controller
      */
     public function create()
     {
+        $commande = $this->getOrCreateCommandeBrouillon();
+        $commande->load('details_commandes.materiel.categorie');
+        
         return Inertia::render('commandes/Create', [
+            'commande' => $commande,
             'materiels' => Materiel::with('categorie')->get(),
         ]);
     }
