@@ -15,6 +15,11 @@ class StatutSeeder extends Seeder
     {
         DB::table('statuts')->insert([
             [
+                'statut' => 'brouillon',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'statut' => 'en attente',
                 'created_at' => now(),
                 'updated_at' => now(),
