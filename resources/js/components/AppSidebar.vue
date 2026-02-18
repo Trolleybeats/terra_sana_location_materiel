@@ -43,11 +43,6 @@ const mainNavItems: NavItem[] = [
         icon: ClipboardList,
     },
     {
-        title: 'Livraisons',
-        href: '#',
-        icon: Car,
-    },
-    {
         title: 'Factures',
         href: '/factures',
         icon: FileText,
