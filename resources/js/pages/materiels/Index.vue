@@ -46,16 +46,16 @@ function resetFilters() {
 }
 
 const deleteDialog = ref(false);
-const materielToDelete = ref<number | null>(null);
+const materielToDelete = ref<any | null>(null);
 
-function openDeleteDialog(id: number) {
-    materielToDelete.value = id;
+function openDeleteDialog(materiel: any) {
+    materielToDelete.value = materiel;
     deleteDialog.value = true;
 }
 
 const deleteMateriel = () => {
     if (materielToDelete.value) {
-        router.delete(`/materiels/${materielToDelete.value}`, {
+        router.delete(`/materiels/${materielToDelete.value.id}`, {
             onSuccess: () => {
                 deleteDialog.value = false;
                 materielToDelete.value = null;
@@ -70,6 +70,21 @@ const deleteMateriel = () => {
         });
     }
 };
+
+function ajouterAuPanier(materielId: number) {
+    router.post(
+        '/panier/ajouter',
+        { materiel_id: materielId, quantite: 1 },
+        {
+            onSuccess: () => {
+                // Success notification is handled by the backend
+            },
+            onError: (errors) => {
+                console.error("Erreur lors de l'ajout au panier.", errors);
+            },
+        },
+    );
+}
 </script>
 <template>
     <AppLayout>
@@ -223,6 +238,11 @@ const deleteMateriel = () => {
                                         Actions pour {{ materiel.nom }}
                                     </DropdownMenuLabel>
                                     <DropdownMenuItem
+                                        @click="ajouterAuPanier(materiel.id)"
+                                    >
+                                        Ajouter à la commande
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
                                         @click="
                                             $inertia.visit(
                                                 `/materiels/${materiel.id}/edit`,
@@ -232,7 +252,7 @@ const deleteMateriel = () => {
                                         Modifier
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
-                                        @click="openDeleteDialog(materiel.id)"
+                                        @click="openDeleteDialog(materiel)"
                                     >
                                         Supprimer
                                     </DropdownMenuItem>
@@ -249,7 +269,7 @@ const deleteMateriel = () => {
                 <DialogHeader>
                     <DialogTitle>Confirmer la suppression</DialogTitle>
                     <DialogDescription>
-                        Êtes-vous sûr de vouloir supprimer "{{
+                        Êtes-vous sûr de vouloir supprimer le matériel "{{
                             materielToDelete?.nom
                         }}" ? Cette action est irréversible.
                     </DialogDescription>

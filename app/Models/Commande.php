@@ -33,6 +33,11 @@ class Commande extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function statut()
+    {
+        return $this->belongsTo(Statut::class);
+    }
+
     public function details_commandes()
     {
         return $this->hasMany(Details_commande::class);

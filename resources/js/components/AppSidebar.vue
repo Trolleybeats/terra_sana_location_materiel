@@ -39,7 +39,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Commandes',
-        href: '#',
+        href: '/commandes',
         icon: ClipboardList,
     },
     {

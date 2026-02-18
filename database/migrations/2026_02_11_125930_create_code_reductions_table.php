@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('code_reductions', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->foreignId('type_reduction_id')->constrained('type_reduction');
+            $table->foreignId('type_reduction_id')->constrained('type_reductions');
             $table->decimal('montant', 10, 2);
             $table->boolean('hors_tva');
             $table->date('date_debut');
