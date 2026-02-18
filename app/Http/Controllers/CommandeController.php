@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commande;
+use App\Models\Commune;
 use App\Models\Details_commande;
+use App\Models\Frais_livraison;
 use App\Models\Materiel;
+use App\Models\Mode_livraison;
+use App\Models\Mode_retour;
+use App\Models\Pays;
 use App\Models\Statut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -250,10 +255,25 @@ class CommandeController extends Controller
     {
         $commande = $this->getOrCreateCommandeBrouillon();
         $commande->load('details_commandes.materiel.categorie');
+
+        $statuts = Statut::all();
+        $modeLivraison = Mode_livraison::all();
+        $modeRetour = Mode_retour::all();
+        $communes = Commune::all();
+        $pays = Pays::all();
+        $fraisLivraison = Frais_livraison::all();
+        
         
         return Inertia::render('commandes/Create', [
             'commande' => $commande,
+            'detailsCommandes' => $commande->details_commandes,
             'materiels' => Materiel::with('categorie')->get(),
+            'statuts' => $statuts,
+            'modeLivraison' => $modeLivraison,
+            'modeRetour' => $modeRetour,
+            'communes' => $communes,
+            'pays' => $pays,
+            'fraisLivraison' => $fraisLivraison,
         ]);
     }
 
@@ -263,28 +283,63 @@ class CommandeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'numero_commande' => 'required|unique:commandes,numero_commande',
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after_or_equal:date_debut',
-            'date_commande' => 'required|date',
             'statut_id' => 'required|exists:statuts,id',
-            'mode_livraison_id' => 'required|exists:modes_livraison,id',
-            'mode_retour_id' => 'required|exists:modes_retour,id',
+            'mode_livraison_id' => 'required|exists:mode_livraisons,id',
+            'mode_retour_id' => 'required|exists:mode_retours,id',
             'nom_rue' => 'required|string|max:255',
             'numero_rue' => 'required|string|max:50',
             'nom_commune_id' => 'required|exists:communes,id',
-            'numero_commune' => 'required|string|max:50',
+            'numero_commune_id' => 'required|string|max:50',
             'pays_id' => 'required|exists:pays,id',
-            'montant_total' => 'required|numeric|min:0',
             'frais_livraison' => 'required|numeric|min:0',
         ]);
 
-        // Logique de création de la commande et de ses détails ici
-        
+        $user = auth()->user();
+        $statutBrouillon = Statut::where('statut', 'brouillon')->first();
 
-        Commande::create($validated);
+        // Récupérer la commande brouillon existante avec ses détails
+        $commande = Commande::where('user_id', $user->id)
+            ->where('statut_id', $statutBrouillon->id)
+            ->with('details_commandes')
+            ->first();
 
-        return redirect()->route('commandes.index')->with('success', 'Commande créée avec succès.');
+        if (!$commande) {
+            return back()->with('error', 'Aucune commande brouillon trouvée.');
+        }
+
+        // Vérifier que la commande contient des articles
+        if ($commande->details_commandes->isEmpty()) {
+            return back()->with('error', 'Veuillez ajouter au moins un article à votre commande.');
+        }
+
+        // Générer un numéro de commande unique
+        $numeroCommande = 'CMD-' . date('Ymd') . '-' . strtoupper(Str::random(6));
+
+        // Calculer le montant total (détails + frais de livraison)
+        $montantDetailsCommandes = $commande->details_commandes->sum('sous_total');
+        $montantTotal = $montantDetailsCommandes + $validated['frais_livraison'];
+
+        // Mettre à jour la commande brouillon avec les informations de livraison
+        $commande->update([
+            'numero_commande' => $numeroCommande,
+            'date_debut' => $validated['date_debut'],
+            'date_fin' => $validated['date_fin'],
+            'date_commande' => now(),
+            'statut_id' => $validated['statut_id'],
+            'mode_livraison_id' => $validated['mode_livraison_id'],
+            'mode_retour_id' => $validated['mode_retour_id'],
+            'nom_rue' => $validated['nom_rue'],
+            'numero_rue' => $validated['numero_rue'],
+            'nom_commune_id' => $validated['nom_commune_id'],
+            'numero_commune_id' => $validated['numero_commune_id'],
+            'pays_id' => $validated['pays_id'],
+            'montant_total' => $montantTotal,
+            'frais_livraison' => $validated['frais_livraison'],
+        ]);
+
+        return redirect()->route('factures.index')->with('success', 'Commande créée avec succès.');
     }
 
     /**
