@@ -11,9 +11,24 @@ class Facture extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id',
-        'amount',
-        'status',
+        'commande_id',
+        'numero_facture',
+        'type_document_id',
+        'date_emission',
+        'date_echeance',
+        'montant_ht',
+        'montant_tva',
+        'montant_ttc',
+        'statut_paiement_id',
+        'url_pdf',
+    ];
+
+    protected $casts = [
+        'date_emission' => 'date',
+        'date_echeance' => 'date',
+        'montant_ht' => 'decimal:2',
+        'montant_tva' => 'decimal:2',
+        'montant_ttc' => 'decimal:2',
     ];
 
     public function type_document()

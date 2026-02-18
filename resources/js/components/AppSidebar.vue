@@ -49,7 +49,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Factures',
-        href: '#',
+        href: '/factures',
         icon: FileText,
     },
     {

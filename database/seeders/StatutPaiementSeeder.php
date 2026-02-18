@@ -15,6 +15,11 @@ class StatutPaiementSeeder extends Seeder
     {
         DB::table('statut_paiements')->insert([
             [
+                'statut' => 'En attente',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'statut' => 'Payée',
                 'created_at' => now(),
                 'updated_at' => now(),

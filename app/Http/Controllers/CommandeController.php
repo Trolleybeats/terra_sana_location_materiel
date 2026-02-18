@@ -256,7 +256,6 @@ class CommandeController extends Controller
         $commande = $this->getOrCreateCommandeBrouillon();
         $commande->load('details_commandes.materiel.categorie');
 
-        $statuts = Statut::all();
         $modeLivraison = Mode_livraison::all();
         $modeRetour = Mode_retour::all();
         $communes = Commune::all();
@@ -268,7 +267,6 @@ class CommandeController extends Controller
             'commande' => $commande,
             'detailsCommandes' => $commande->details_commandes,
             'materiels' => Materiel::with('categorie')->get(),
-            'statuts' => $statuts,
             'modeLivraison' => $modeLivraison,
             'modeRetour' => $modeRetour,
             'communes' => $communes,
@@ -285,19 +283,19 @@ class CommandeController extends Controller
         $validated = $request->validate([
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after_or_equal:date_debut',
-            'statut_id' => 'required|exists:statuts,id',
             'mode_livraison_id' => 'required|exists:mode_livraisons,id',
             'mode_retour_id' => 'required|exists:mode_retours,id',
             'nom_rue' => 'required|string|max:255',
-            'numero_rue' => 'required|string|max:50',
+            'numero_rue' => 'required|integer',
             'nom_commune_id' => 'required|exists:communes,id',
-            'numero_commune_id' => 'required|string|max:50',
+            'numero_commune_id' => 'required|exists:communes,id',
             'pays_id' => 'required|exists:pays,id',
             'frais_livraison' => 'required|numeric|min:0',
         ]);
 
         $user = auth()->user();
         $statutBrouillon = Statut::where('statut', 'brouillon')->first();
+        $statutConfirmee = Statut::where('statut', 'confirmée')->first();
 
         // Récupérer la commande brouillon existante avec ses détails
         $commande = Commande::where('user_id', $user->id)
@@ -327,7 +325,7 @@ class CommandeController extends Controller
             'date_debut' => $validated['date_debut'],
             'date_fin' => $validated['date_fin'],
             'date_commande' => now(),
-            'statut_id' => $validated['statut_id'],
+            'statut_id' => $statutConfirmee->id, // Commande validée directement
             'mode_livraison_id' => $validated['mode_livraison_id'],
             'mode_retour_id' => $validated['mode_retour_id'],
             'nom_rue' => $validated['nom_rue'],
@@ -339,7 +337,13 @@ class CommandeController extends Controller
             'frais_livraison' => $validated['frais_livraison'],
         ]);
 
-        return redirect()->route('factures.index')->with('success', 'Commande créée avec succès.');
+        // Créer la facture associée à la commande
+        (new FactureController())->creerFacture($commande);
+
+        // Créer une nouvelle commande brouillon vide pour les prochains achats
+        $this->getOrCreateCommandeBrouillon();
+
+        return redirect()->route('factures.index')->with('success', 'Commande et facture créées avec succès.');
     }
 
     /**
