@@ -105,7 +105,7 @@ const formatMontant = (montant) => {
                             <td
                                 class="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
                             >
-                                {{ facture.commande?.user?.name || '-' }}
+                                {{ facture.commande?.user?.email || '-' }}
                             </td>
                             <td
                                 class="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
