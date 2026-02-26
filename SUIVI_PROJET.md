@@ -1,7 +1,7 @@
 # 📋 Suivi du Projet - Terra Sana Location Matériel
 
-**Dernière mise à jour :** 18 février 2026  
-**Version :** 0.4.0 (Phases 1, 2 et 3 en cours)  
+**Dernière mise à jour :** 26 février 2026  
+**Version :** 0.5.0 (Phases 1, 2 et 3 en cours)  
 **Statut :** Développement avancé
 
 ---
@@ -14,13 +14,16 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 
 ### Technologies utilisées
 
-- **Backend :** Laravel 11.x (PHP)
-- **Frontend :** Vue.js 3 + Inertia.js + TypeScript
-- **Authentification :** Laravel Fortify (2FA activé)
-- **Styling :** Tailwind CSS v4
-- **Build :** Vite 7
+- **Backend :** Laravel 12.0 (PHP 8.2+)
+- **Frontend :** Vue.js 3.5 + Inertia.js 2.3 + TypeScript 5.2
+- **Authentification :** Laravel Fortify 1.30 (2FA activé)
+- **UI Components :** Reka UI 2.6 + class-variance-authority
+- **Styling :** Tailwind CSS v4.1 + Lucide Icons
+- **Build :** Vite 7.0
 - **Base de données :** MySQL/MariaDB
-- **Tests :** Pest PHP
+- **Tests :** Pest PHP 4.3
+- **Qualité code :** ESLint 9.17 + Prettier 3.4 + Laravel Pint 1.24
+- **Utilitaires :** VueUse 12.8, Wayfinder 0.1.9
 
 ---
 
@@ -150,25 +153,66 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 
 #### Interface utilisateur
 
+**Pages principales**
+
 - [x] Page d'accueil (Welcome)
 - [x] Dashboard
-- [x] Pages CRUD Particuliers complet (Index, Create, Show, Edit)
-- [x] Pages CRUD Professionnels complet (Index, Create, Show, Edit)
-- [x] Pages CRUD Matériels complet (Index, Create, Edit)
-- [x] Pages CRUD Utilisateurs (Index, Create)
-- [x] Pages Commandes (Index, Create)
-- [x] Pages Contact Pro (gestion des contacts professionnels)
-- [x] Système de navigation avec Inertia.js
-- [x] Layouts d'authentification multiples
-- [x] Composants réutilisables
+
+**Pages CRUD**
+
+- [x] Particuliers : Create, Show, Edit
+- [x] Professionnels : Create, Show, Edit
+- [x] Matériels : Index, Create, Edit (3/4)
+- [ ] Matériels : Show (avec galerie photos - À FAIRE)
+- [x] Utilisateurs : Index, Create
+- [x] Commandes : Index, Create (2/4)
+- [x] Factures : Index, Create, Show (3/4)
+- [x] Contact Pro : Create, Edit (2/4)
+
+**Pages d'authentification (7 pages)**
+
+- [x] Login (connexion)
+- [x] Register (inscription)
+- [x] ForgotPassword (mot de passe oublié)
+- [x] ResetPassword (réinitialisation)
+- [x] ConfirmPassword (confirmation)
+- [x] VerifyEmail (vérification email)
+- [x] TwoFactorChallenge (défi 2FA)
+
+**Pages Settings (4 pages)**
+
+- [x] Profile (gestion du profil utilisateur)
+- [x] Password (changement de mot de passe)
+- [x] TwoFactor (authentification à deux facteurs)
+- [x] Appearance (préférences d'affichage)
+
+**Infrastructure UI**
+
+- [x] Layouts : AppLayout, AuthLayout (+ 3 variantes auth)
+- [x] 126+ composants réutilisables Vue
+- [x] Système de navigation avec Inertia.js + Wayfinder
+- [x] Breadcrumbs automatiques
+- [x] Thèmes et apparence personnalisables
+
+**Bibliothèques UI et composants intégrés**
+
+- [x] Reka UI 2.6 (composants headless Vue)
+- [x] Lucide Vue Next 0.468 (icônes)
+- [x] class-variance-authority (variantes de composants)
+- [x] tailwind-merge + clsx (gestion des classes)
+- [x] tw-animate-css (animations Tailwind)
+- [x] VueUse 12.8 (composables utilitaires)
+- [x] vue-input-otp (input OTP pour 2FA)
 
 #### Configuration & Outils
 
-- [x] Configuration ESLint + TypeScript
-- [x] Configuration Prettier
-- [x] Configuration Tailwind CSS v4
-- [x] Configuration Vite
-- [x] Scripts de build et développement
+- [x] Configuration ESLint 9.17 + TypeScript 5.2
+- [x] Configuration Prettier 3.4 avec plugin Tailwind
+- [x] Configuration Tailwind CSS v4.1
+- [x] Configuration Vite 7.0 avec support SSR
+- [x] Laravel Pint 1.24 pour formatage PHP
+- [x] Scripts npm : dev, build, build:ssr, lint, format
+- [x] Wayfinder 0.1.9 pour routing automatique
 
 ---
 
@@ -177,18 +221,23 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 ### Priorité haute
 
 - [ ] **Finaliser le module Commandes**
+    - Page Show pour les commandes avec détails complets
     - Validation complète du panier
     - Gestion des dates de location (début/fin)
-    - Calcul automatique des tarifs
+    - Calcul automatique des tarifs selon durée
     - Processus de checkout complet
-    - Page Show pour les commandes
+    - Confirmation et suivi de statut
 
 - [ ] **Compléter le module Facturation**
-    - Génération automatique de factures
+    - Page Show pour les factures
+    - Page Edit pour les factures
+    - Génération automatique de factures PDF
+    - Liaison automatique facture ↔ commande
     - Export PDF
-    - Interface de consultation des factures
-    - Liens factures ↔ commandes
+    - Système de numérotation automatique
 
+- [ ] **Compléter les pages Index et Show manquantes**
+    - Page Show pour Matériels (détails + galerie photos)
 - [ ] **Système de gestion des photos**
     - Upload multiple de photos
     - Galerie pour chaque matériel
@@ -298,6 +347,21 @@ _Aucun bug critique identifié pour le moment_
 
 - [ ] À documenter au fur et à mesure des tests
 
+### 📌 Observations importantes
+
+**Points à noter**
+
+- Le système de galerie photos pour matériels n'est pas encore implémenté
+- Aucun test automatisé n'est encore en place
+- La génération PDF des factures est à implémenter
+
+**Décisions techniques en attente**
+
+- Choix de la bibliothèque pour génération PDF (mpdf, dompdf, ou autre)
+- Stratégie de stockage des photos (local, cloud S3)
+- Implémentation du calendrier de disponibilité (bibliothèque à choisir)
+- Système de pagination à standardiser (nombre d'éléments par page)
+
 ---
 
 ## 📝 Notes techniques
@@ -359,16 +423,38 @@ _Aucun bug critique identifié pour le moment_
 
 ### Routes principales
 
-- `/` - Page d'accueil
-- `/dashboard` - Tableau de bord (authentifié)
-- `/utilisateurs` - Gestion des utilisateurs (authentifié)
-- `/particuliers` - Gestion des particuliers (authentifié)
-- `/professionnels` - Gestion des professionnels (authentifié)
-- `/materiels` - Gestion des matériels (authentifié)
-- `/contact_pro` - Gestion des contacts pros (authentifié)
-- `/commandes` - Gestion des commandes/locations (authentifié)
-- `/panier/*` - Gestion du panier (ajouter, retirer, modifier, vider)
-- `/settings/*` - Paramètres utilisateur (authentifié)
+**Routes publiques**
+
+- `/` - Page d'accueil (Welcome)
+- `/login` - Connexion
+- `/register` - Inscription
+- `/forgot-password` - Mot de passe oublié
+- `/reset-password` - Réinitialisation mot de passe
+
+**Routes authentifiées**
+
+- `/dashboard` - Tableau de bord principal
+- `/utilisateurs/*` - Gestion des utilisateurs (Index, Create)
+- `/particuliers/*` - Gestion des particuliers (Create, Show, Edit)
+- `/professionnels/*` - Gestion des professionnels (Create, Show, Edit)
+- `/materiels/*` - Gestion des matériels (Index, Create, Edit)
+- `/contact_pro/*` - Gestion des contacts pros (Create, Edit)
+- `/commandes/*` - Gestion des commandes/locations (Index, Create)
+- `/factures/*` - Gestion des factures (Index, Create)
+
+**Routes panier (authentifiées)**
+
+- `POST /panier/ajouter` - Ajouter un article au panier
+- `DELETE /panier/{detail}` - Retirer un article du panier
+- `PUT /panier/{detail}` - Mettre à jour la quantité
+- `DELETE /panier` - Vider le panier
+
+**Routes settings (authentifiées)**
+
+- `/settings/profile` - Gestion du profil
+- `/settings/password` - Changement de mot de passe
+- `/settings/two-factor` - Configuration 2FA
+- `/settings/appearance` - Préférences d'apparence
 
 ---
 
@@ -400,11 +486,20 @@ php artisan db:seed
 # Lancer le serveur Laravel
 php artisan serve
 
-# Lancer Laravel en mode dev
+#Lancer Laravel en mode dev
 composer run dev
 
-# Lancer les tests
+# Lancer les tests avec Pest
 php artisan test
+# ou
+./vendor/bin/pest
+
+# Vérifier le code (linting)
+npm run lint
+
+# Formater le code
+npm run format
+./vendor/bin/pint
 ```
 
 ### Production
@@ -449,10 +544,12 @@ php artisan view:cache
 
 ### Documentation
 
-- [Laravel 11.x](https://laravel.com/docs/11.x)
+- [Laravel 12.x](https://laravel.com/docs/12.x)
 - [Vue.js 3](https://vuejs.org/)
 - [Inertia.js](https://inertiajs.com/)
 - [Tailwind CSS v4](https://tailwindcss.com/)
+- [Reka UI](https://reka-ui.com/)
+- [VueUse](https://vueuse.org/)
 
 ### Environnement de développement
 
@@ -465,12 +562,22 @@ php artisan view:cache
 
 ### Code
 
-- Contrôleurs : 22+ (dont Settings)
-- Modèles : 24
-- Migrations : 27
+**Backend (PHP/Laravel)**
+
+- Contrôleurs : 22 (+ groupe Settings)
+- Modèles Eloquent : 24
+- Migrations : 27 tables
 - Factories : 24
-- Seeders : 25
-- Routes : 7 groupes de ressources + routes panier
+- Seeders : 25 (dont DatabaseSeeder)
+- Routes : 7 groupes de ressources + 4 routes panier
+
+**Frontend (Vue.js/TypeScript)**
+
+- Pages Vue : 25+ (auth, crud, settings, etc.)
+- Composants réutilisables : 126+
+- Layouts : 5 (AppLayout, AuthLayout + variantes)
+- Types TypeScript : Fortement typé
+- Actions Inertia : Navigation optimisée
 
 ### Tests
 
@@ -481,6 +588,48 @@ php artisan view:cache
 ---
 
 ## ✏️ Journal des modifications
+
+### [0.5.0] - 26/02/2026
+
+#### Vue d'ensemble
+
+Consolidation complète des modules avec mise à jour majeure de la documentation projet. Inventaire précis des fonctionnalités implémentées et identification claire des éléments manquants pour compléter les CRUD.
+
+#### Ajouté
+
+- **Documentation détaillée**
+    - Inventaire complet des 126+ composants Vue
+    - Liste précise des 25+ pages implémentées avec statut CRUD
+    - Identification des pages manquantes (Index, Show, Edit)
+    - Mise à jour des versions technologiques (Laravel 12.0, Vue 3.5, Vite 7.0)
+    - Métriques précises du code (backend + frontend)
+    - Liens de documentation mis à jour (Reka UI, VueUse)
+
+- **Interface Facturation**
+    - Page Index des factures (consultation liste)
+    - Page Create pour nouvelle facture
+    - Navigation et routing pour module factures
+
+- **Pages Settings complètes (4 pages)**
+    - Page Profile (gestion du profil utilisateur)
+    - Page Password (changement de mot de passe)
+    - Page TwoFactor (authentification à deux facteurs)
+    - Page Appearance (préférences d'affichage)
+    - Layout dédié pour les paramètres
+
+- **Pages d'authentification complètes (7 pages)**
+    - Login, Register, ForgotPassword, ResetPassword
+    - ConfirmPassword, VerifyEmail, TwoFactorChallenge
+    - 3 layouts d'authentification (Simple, Split, Card)
+
+#### Identifié à compléter
+
+- **Pages Show manquantes** : Matériels (avec galerie)
+
+#### Priorités définies
+
+3. Implémentation de la génération PDF pour factures
+4. Système de galerie photos pour matériels
 
 ### [0.4.0] - 18/02/2026
 
@@ -582,36 +731,34 @@ Avancée significative sur les Phases 2 et 3 avec l'implémentation du système 
 
 ## 🎯 Prochaines étapes immédiates
 
-1. **Finaliser le système de Commandes/Location**
-    - Page Show pour les commandes avec détails complets
+2. **Finaliser le système de Commandes/Location**
     - Implémenter le calendrier de disponibilité
     - Système de validation des dates de location
     - Calcul automatique des tarifs selon durée
     - Processus de checkout complet
     - Confirmation par email
 
-2. **Compléter le module Facturation**
+3. **Compléter le module Facturation**
     - Génération automatique de factures PDF
     - Liaison automatique facture ↔ commande
-    - Interface de consultation et recherche de factures
     - Gestion des devis
-    - Système de numérotation des factures
+    - Système de numérotation automatique des factures
 
-3. **Finaliser la gestion des Photos**
+4. **Finaliser la gestion des Photos**
     - Upload multiple de photos pour matériel
     - Galerie responsive avec lightbox
     - Réorganisation par drag & drop
     - Optimisation automatique et thumbnails
     - Définir photo principale
 
-4. **Améliorer l'UX globale**
+5. **Améliorer l'UX globale**
     - Messages flash (succès/erreur) cohérents
     - Loaders et indicateurs pendant les requêtes
     - Confirmations modales pour suppressions
     - Pagination sur toutes les listes
     - Système de recherche global
 
-5. **Tests et Qualité**
+6. **Tests et Qualité**
     - Implémenter tests unitaires (Pest)
     - Tests de fonctionnalités pour CRUD principaux
     - Validation des règles métier

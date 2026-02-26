@@ -47,7 +47,20 @@ class FactureController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $facture = Facture::with(['commande.user', 'type_document', 'statut_paiement'])
+            ->findOrFail($id);
+
+            return Inertia::render('factures/Show', [
+            'facture' => $facture->load(['type_document', 'statut_paiement']),
+            'commande' => $facture->commande->load([
+                'user',
+                'commune',
+                'pays',
+                'statut',
+                'mode_livraison',
+                'mode_retour',
+            ])
+        ]);
     }
 
     /**

@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 
 defineProps({
@@ -19,6 +19,11 @@ const formatMontant = (montant) => {
         style: 'currency',
         currency: 'EUR',
     }).format(montant);
+};
+
+const VoirDetails = (id) => {
+    // Rediriger vers la page de détails de la facture avec Inertia
+    router.visit(`/factures/${id}`);
 };
 </script>
 
@@ -95,7 +100,8 @@ const formatMontant = (montant) => {
                         <tr
                             v-for="facture in factures"
                             :key="facture.id"
-                            class="hover:bg-gray-50"
+                            class="cursor-pointer hover:bg-gray-50"
+                            @click="VoirDetails(facture.id)"
                         >
                             <td
                                 class="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900"
