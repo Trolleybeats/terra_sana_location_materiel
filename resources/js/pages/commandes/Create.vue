@@ -59,7 +59,7 @@ const form = useForm({
     mode_livraison_id: props.commande ? props.commande.mode_livraison_id : null,
     mode_retour_id: props.commande ? props.commande.mode_retour_id : null,
     nom_rue: '',
-    numero_rue: '',
+    numero_rue: null,
     nom_commune_id: props.commande ? props.commande.nom_commune_id : null,
     numero_commune_id: props.commande ? props.commande.numero_commune_id : null,
     pays_id: props.commande ? props.commande.pays_id : null,

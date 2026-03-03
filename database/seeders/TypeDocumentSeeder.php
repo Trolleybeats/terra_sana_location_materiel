@@ -20,6 +20,11 @@ class TypeDocumentSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'document' => 'Facture',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'document' => 'Livraison',
                 'created_at' => now(),
                 'updated_at' => now(),

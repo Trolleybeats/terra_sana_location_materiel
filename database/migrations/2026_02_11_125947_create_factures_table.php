@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('montant_tva', 10, 2);
             $table->decimal('montant_ttc', 10, 2);
             $table->foreignId('statut_paiement_id')->constrained('statut_paiements');
-            $table->string('url_pdf');
+            $table->string('url_pdf')->nullable();
             $table->timestamps();
         });
     }

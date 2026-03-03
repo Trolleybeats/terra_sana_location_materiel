@@ -36,5 +36,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('panier/{detail}', [App\Http\Controllers\CommandeController::class, 'mettreAJourQuantite'])->name('panier.update');
     Route::delete('panier', [App\Http\Controllers\CommandeController::class, 'viderPanier'])->name('panier.vider');
 });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('factures', App\Http\Controllers\FactureController::class);
+});
 
 require __DIR__.'/settings.php';

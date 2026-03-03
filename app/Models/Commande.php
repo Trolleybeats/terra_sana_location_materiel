@@ -42,4 +42,22 @@ class Commande extends Model
     {
         return $this->hasMany(Details_commande::class);
     }
+
+    public function commune()
+    {
+        return $this->belongsTo(Commune::class, 'nom_commune_id');
+    }
+
+    public function pays()
+    {
+        return $this->belongsTo(Pays::class);
+    }
+    public function mode_livraison()
+    {
+        return $this->belongsTo(Mode_livraison::class);
+    }
+    public function mode_retour()
+    {
+        return $this->belongsTo(Mode_retour::class);
+    }
 }
