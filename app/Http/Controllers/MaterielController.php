@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categorie_materiel;
 use App\Models\Materiel;
+use App\Models\Photo_materiel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -60,9 +61,21 @@ class MaterielController extends Controller
             'dimensions' => 'nullable|string|max:255',
             'stock_total' => 'required|integer|min:0',
             'stock_disponible' => 'required|integer|min:0|max:' . $request->input('stock_total'),
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        Materiel::create($validated);
+        $materiel = Materiel::create($validated);
+
+        // Gérer les photos si présentes
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('photos/materiels', 'public');
+                Photo_materiel::create([
+                    'materiel_id' => $materiel->id,
+                    'url_photo' => '/storage/' . $path,
+                ]);
+            }
+        }
 
         return redirect()->route('materiels.index')->with('success', 'Matériel créé avec succès.');
     }
@@ -72,7 +85,11 @@ class MaterielController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Inertia::render('materiels/Show', [
+            'materiel' => Materiel::with('categorie')->findOrFail($id),
+            'categories' => Categorie_materiel::all(),
+            'photos'=>Photo_materiel::where('materiel_id', $id)->get(),
+        ]);
     }
 
     /**
@@ -85,6 +102,7 @@ class MaterielController extends Controller
         return Inertia::render('materiels/Edit', [
             'materiel' => $materiel,
             'categories' => Categorie_materiel::all(),
+            'photos' => Photo_materiel::where('materiel_id', $id)->get(),
         ]);
     }
 

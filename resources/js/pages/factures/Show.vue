@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
-import { ref } from 'process';
+import { router } from '@inertiajs/vue3';
 
 defineProps({
     facture: {
@@ -10,6 +10,10 @@ defineProps({
     commande: {
         type: Object,
         required: false,
+    },
+    detailsCommandes: {
+        type: Array,
+        default: () => [],
     },
 });
 
@@ -23,6 +27,10 @@ const formatMontant = (montant) => {
         style: 'currency',
         currency: 'EUR',
     }).format(montant);
+};
+
+const voirMateriel = (id) => {
+    router.visit(`/materiels/${id}`);
 };
 </script>
 
@@ -63,7 +71,7 @@ const formatMontant = (montant) => {
                 </div>
 
                 <!-- Détails de la commande -->
-                <div>
+                <div v-if="commande" class="mt-6">
                     <h2 class="mb-2 text-xl font-semibold">
                         Informations sur la commande
                     </h2>
@@ -105,6 +113,113 @@ const formatMontant = (montant) => {
                     <p>
                         <strong>Mode de retour:</strong>
                         {{ commande.mode_retour?.mode_retour || '-' }}
+                    </p>
+                </div>
+
+                <!-- Liste des matériels loués -->
+                <div class="mt-6">
+                    <h2 class="mb-2 text-xl font-semibold">Matériels loués</h2>
+
+                    <div
+                        v-if="detailsCommandes && detailsCommandes.length > 0"
+                        class="mt-4 overflow-x-auto"
+                    >
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                    >
+                                        Matériel
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                    >
+                                        Catégorie
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                    >
+                                        Quantité
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                    >
+                                        Prix unitaire HT
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                    >
+                                        Total HT
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr
+                                    v-for="detail in detailsCommandes"
+                                    :key="detail.id"
+                                    @click="voirMateriel(detail.materiel_id)"
+                                    class="cursor-pointer hover:bg-gray-50"
+                                >
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <div
+                                                    class="text-sm font-medium text-gray-900"
+                                                >
+                                                    {{
+                                                        detail.materiel?.nom ||
+                                                        '-'
+                                                    }}
+                                                </div>
+                                                <div
+                                                    class="text-sm text-gray-500"
+                                                >
+                                                    Réf: #{{
+                                                        detail.materiel?.id
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 text-sm whitespace-nowrap text-gray-900"
+                                    >
+                                        {{
+                                            detail.materiel?.categorie?.nom ||
+                                            '-'
+                                        }}
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 text-sm whitespace-nowrap text-gray-900"
+                                    >
+                                        {{ detail.quantite || 1 }}
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 text-sm whitespace-nowrap text-gray-900"
+                                    >
+                                        {{
+                                            formatMontant(
+                                                detail.prix_unitaire || 0,
+                                            )
+                                        }}
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900"
+                                    >
+                                        {{
+                                            formatMontant(
+                                                detail.sous_total || 0,
+                                            )
+                                        }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p v-else class="mt-4 text-gray-500">
+                        Aucun matériel associé à cette facture.
                     </p>
                 </div>
             </div>

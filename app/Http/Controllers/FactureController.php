@@ -50,16 +50,25 @@ class FactureController extends Controller
         $facture = Facture::with(['commande.user', 'type_document', 'statut_paiement'])
             ->findOrFail($id);
 
-            return Inertia::render('factures/Show', [
+        $commande = $facture->commande->load([
+            'user',
+            'commune',
+            'pays',
+            'statut',
+            'mode_livraison',
+            'mode_retour',
+        ]);
+
+        // Charger les détails de commande avec les matériels et leurs catégories
+        $detailsCommandes = $commande->details_commandes()->with([
+            'materiel.categorie',
+            'materiel.photos'
+        ])->get();
+
+        return Inertia::render('factures/Show', [
             'facture' => $facture->load(['type_document', 'statut_paiement']),
-            'commande' => $facture->commande->load([
-                'user',
-                'commune',
-                'pays',
-                'statut',
-                'mode_livraison',
-                'mode_retour',
-            ])
+            'commande' => $commande,
+            'detailsCommandes' => $detailsCommandes,
         ]);
     }
 

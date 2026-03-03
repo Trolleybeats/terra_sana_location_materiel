@@ -25,6 +25,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('materiels', App\Http\Controllers\MaterielController::class);
+    Route::post('photos-materiel', [App\Http\Controllers\PhotoMaterielController::class, 'store'])->name('photos-materiel.store');
+    Route::delete('photos-materiel/{id}', [App\Http\Controllers\PhotoMaterielController::class, 'destroy'])->name('photos-materiel.destroy');
 });
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('contact_pro', App\Http\Controllers\ContactProController::class);
