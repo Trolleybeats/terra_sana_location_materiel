@@ -11,7 +11,7 @@ class Photo_materiel extends Model
     use HasFactory;
 
     protected $fillable = [
-        'url',
+        'url_photo',
         'materiel_id',
     ];
 

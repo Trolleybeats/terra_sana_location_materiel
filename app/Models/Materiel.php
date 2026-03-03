@@ -25,6 +25,11 @@ class Materiel extends Model
         return $this->belongsTo(Categorie_materiel::class, 'categorie_id');
     }
 
+    public function photos()
+    {
+        return $this->hasMany(Photo_materiel::class, 'materiel_id');
+    }
+
     public function detailsCommandes()
     {
         return $this->hasMany(Details_commande::class, 'materiel_id');

@@ -85,6 +85,10 @@ function ajouterAuPanier(materielId: number) {
         },
     );
 }
+
+const voirDetails = (id: number) => {
+    router.visit(`/materiels/${id}`);
+};
 </script>
 <template>
     <AppLayout>
@@ -195,7 +199,12 @@ function ajouterAuPanier(materielId: number) {
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
-                    <tr v-for="materiel in materiels" :key="materiel.id">
+                    <tr
+                        v-for="materiel in materiels"
+                        :key="materiel.id"
+                        @click="voirDetails(materiel.id)"
+                        class="cursor-pointer hover:bg-gray-50"
+                    >
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ materiel.id }}
                         </td>
@@ -226,9 +235,10 @@ function ajouterAuPanier(materielId: number) {
                         </td>
                         <td
                             class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap"
+                            @click.stop
                         >
                             <DropdownMenu>
-                                <DropdownMenuTrigger @click.prevent>
+                                <DropdownMenuTrigger>
                                     <Button variant="outline" size="sm">
                                         •••
                                     </Button>
