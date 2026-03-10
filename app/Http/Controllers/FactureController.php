@@ -9,6 +9,7 @@ use App\Models\Type_document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FactureController extends Controller
 {
@@ -137,5 +138,38 @@ class FactureController extends Controller
             'statut_paiement_id' => $statutPaiement->id,
             'url_pdf' => null, // À générer ultérieurement
         ]);
+    }
+
+    /**
+     * Télécharger la facture en PDF
+     */
+    public function downloadPdf(string $id)
+    {
+        $facture = Facture::with([
+            'commande.user',
+            'commande.commune',
+            'commande.pays',
+            'commande.statut',
+            'commande.mode_livraison',
+            'commande.mode_retour',
+            'type_document',
+            'statut_paiement'
+        ])->findOrFail($id);
+
+        // Charger les détails de commande avec les matériels et leurs catégories
+        $detailsCommandes = $facture->commande->details_commandes()->with([
+            'materiel.categorie',
+            'materiel.photos'
+        ])->get();
+
+        // Générer le PDF
+        $pdf = Pdf::loadView('pdf.facture', [
+            'facture' => $facture,
+            'commande' => $facture->commande,
+            'detailsCommandes' => $detailsCommandes,
+        ]);
+
+        // Télécharger le PDF
+        return $pdf->download('facture-' . $facture->numero_facture . '.pdf');
     }
 }

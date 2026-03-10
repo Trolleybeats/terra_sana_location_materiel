@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('factures', App\Http\Controllers\FactureController::class);
+    Route::get('factures/{id}/download-pdf', [App\Http\Controllers\FactureController::class, 'downloadPdf'])->name('factures.download-pdf');
 });
 
 require __DIR__.'/settings.php';
