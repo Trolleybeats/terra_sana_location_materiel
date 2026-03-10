@@ -226,9 +226,8 @@ const voirMateriel = (id) => {
             <!-- Lien pour télécharger la facture au format PDF -->
             <div class="mt-4">
                 <a
-                    :href="facture.url_pdf"
+                    :href="`/factures/${facture.id}/download-pdf`"
                     class="inline-block rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                    target="_blank"
                 >
                     Télécharger la facture (PDF)
                 </a>
