@@ -1,7 +1,7 @@
 # 📋 Suivi du Projet - Terra Sana Location Matériel
 
-**Dernière mise à jour :** 26 février 2026  
-**Version :** 0.5.0 (Phases 1, 2 et 3 en cours)  
+**Dernière mise à jour :** 12 mars 2026  
+**Version :** 0.6.0 (Phase 1 complétée, Phases 2 et 3 en cours)  
 **Statut :** Développement avancé
 
 ---
@@ -24,6 +24,7 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - **Tests :** Pest PHP 4.3
 - **Qualité code :** ESLint 9.17 + Prettier 3.4 + Laravel Pint 1.24
 - **Utilitaires :** VueUse 12.8, Wayfinder 0.1.9
+- **PDF :** DomPDF 3.1 (génération factures)
 
 ---
 
@@ -160,10 +161,9 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 
 **Pages CRUD**
 
-- [x] Particuliers : Create, Show, Edit
-- [x] Professionnels : Create, Show, Edit
-- [x] Matériels : Index, Create, Edit (3/4)
-- [ ] Matériels : Show (avec galerie photos - À FAIRE)
+- [x] Particuliers : Create, Show, Edit (3/3)
+- [x] Professionnels : Create, Show, Edit (3/3)
+- [x] Matériels : Index, Create, Edit, Show (4/4)
 - [x] Utilisateurs : Index, Create
 - [x] Commandes : Index, Create (2/4)
 - [x] Factures : Index, Create, Show (3/4)
@@ -213,6 +213,7 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - [x] Laravel Pint 1.24 pour formatage PHP
 - [x] Scripts npm : dev, build, build:ssr, lint, format
 - [x] Wayfinder 0.1.9 pour routing automatique
+- [x] DomPDF 3.1 pour génération PDF des factures
 
 ---
 
@@ -221,7 +222,7 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 ### Priorité haute
 
 - [ ] **Finaliser le module Commandes**
-    - Page Show pour les commandes avec détails complets
+    - Page Edit pour les commandes
     - Validation complète du panier
     - Gestion des dates de location (début/fin)
     - Calcul automatique des tarifs selon durée
@@ -229,20 +230,19 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
     - Confirmation et suivi de statut
 
 - [ ] **Compléter le module Facturation**
-    - Page Show pour les factures
     - Page Edit pour les factures
-    - Génération automatique de factures PDF
+    - Améliorer la génération automatique de factures
+    - Personnalisation du design PDF
     - Liaison automatique facture ↔ commande
-    - Export PDF
     - Système de numérotation automatique
+    - Envoi par email
 
-- [ ] **Compléter les pages Index et Show manquantes**
-    - Page Show pour Matériels (détails + galerie photos)
-- [ ] **Système de gestion des photos**
-    - Upload multiple de photos
-    - Galerie pour chaque matériel
-    - Optimisation et thumbnails
-    - Réorganisation des photos
+- [ ] **Améliorer le système de gestion des photos**
+    - Améliorer l'upload multiple de photos
+    - Optimiser la galerie pour chaque matériel
+    - Génération automatique de thumbnails
+    - Réorganisation des photos par drag & drop
+    - Définir une photo principale
 
 ### Priorité moyenne
 
@@ -267,7 +267,7 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 
 ## 📅 Fonctionnalités à venir
 
-### Phase 1 - Gestion du matériel (✅ COMPLÉTÉE - 09-15/02/2026)
+### Phase 1 - Gestion du matériel (✅ COMPLÉTÉE - 09/02-12/03/2026)
 
 - [x] Modèle Materiel
 - [x] Modèle Categorie_materiel
@@ -276,10 +276,10 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - [x] Modèle Photo_materiel
 - [x] Migrations et factories
 - [x] Controllers CRUD complets
-- [x] Pages Index, Create et Edit pour matériels
-- [ ] Page Show pour matériel (avec galerie photos)
+- [x] Pages Index, Create, Edit et Show pour matériels ✅
+- [x] Page Show pour matériel (avec galerie photos) ✅
 - [x] Gestion de l'inventaire de base
-- [ ] Upload et gestion des photos (en cours)
+- [x] Upload et gestion des photos de base ✅
 - [x] Interface de gestion des catégories
 - [x] Système d'état et maintenance du matériel
 
@@ -312,12 +312,10 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - [x] Modèle Reduction_client
 - [x] FactureController de base
 - [x] Système de réductions et codes promo
-- [ ] Génération automatique de factures
-- [ ] Génération de devis
-- [ ] Export PDF des factures
-- [ ] Intégration paiement en ligne
-- [ ] Gestion des acomptes
-- [ ] Rappels de paiement automatiques
+- [x] Pages Index, Create et Show des factures ✅
+- [x] Génération PDF des factures (DomPDF) ✅
+- [x] Route de téléchargement PDF ✅
+- [ ] Envoi par email
 - [ ] Reporting financier
 - [ ] Tableau de bord financier
 
@@ -326,14 +324,7 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - [ ] Notifications par email/SMS
 - [ ] Système de notes et commentaires
 - [ ] Contrats numériques de location
-- [ ] Signature électronique
-- [ ] Export PDF des contrats
 - [ ] Statistiques avancées et tableaux de bord
-- [ ] Rapports personnalisables
-- [ ] API REST pour intégrations tierces
-- [ ] Application mobile (PWA)
-- [ ] Mode hors-ligne
-- [ ] Système de maintenance préventive
 
 ---
 
@@ -351,16 +342,21 @@ _Aucun bug critique identifié pour le moment_
 
 **Points à noter**
 
-- Le système de galerie photos pour matériels n'est pas encore implémenté
+- Le système de galerie photos pour matériels est implémenté en version de base (peut être amélioré)
 - Aucun test automatisé n'est encore en place
-- La génération PDF des factures est à implémenter
+- La génération PDF des factures est fonctionnelle mais peut être personnalisée davantage
+
+**Décisions techniques prises**
+
+- ✅ Bibliothèque PDF : DomPDF 3.1 choisie et installée
+- ✅ Galerie photos matériels : Implémentation de base complétée
 
 **Décisions techniques en attente**
 
-- Choix de la bibliothèque pour génération PDF (mpdf, dompdf, ou autre)
 - Stratégie de stockage des photos (local, cloud S3)
 - Implémentation du calendrier de disponibilité (bibliothèque à choisir)
 - Système de pagination à standardiser (nombre d'éléments par page)
+- Design et branding des PDF (logo, couleurs, mise en page)
 
 ---
 
@@ -437,10 +433,11 @@ _Aucun bug critique identifié pour le moment_
 - `/utilisateurs/*` - Gestion des utilisateurs (Index, Create)
 - `/particuliers/*` - Gestion des particuliers (Create, Show, Edit)
 - `/professionnels/*` - Gestion des professionnels (Create, Show, Edit)
-- `/materiels/*` - Gestion des matériels (Index, Create, Edit)
+- `/materiels/*` - Gestion des matériels (Index, Create, Edit, Show)
 - `/contact_pro/*` - Gestion des contacts pros (Create, Edit)
 - `/commandes/*` - Gestion des commandes/locations (Index, Create)
-- `/factures/*` - Gestion des factures (Index, Create)
+- `/factures/*` - Gestion des factures (Index, Create, Show)
+- `GET /factures/{id}/download-pdf` - Téléchargement PDF facture
 
 **Routes panier (authentifiées)**
 
@@ -573,8 +570,9 @@ php artisan view:cache
 
 **Frontend (Vue.js/TypeScript)**
 
-- Pages Vue : 25+ (auth, crud, settings, etc.)
-- Composants réutilisables : 126+
+- Pages Vue : 27+ (auth, crud, settings, etc.)
+- Composants réutilisables : 140+
+- Composants UI : 20+ bibliothèques (alert, avatar, badge, button, card, etc.)
 - Layouts : 5 (AppLayout, AuthLayout + variantes)
 - Types TypeScript : Fortement typé
 - Actions Inertia : Navigation optimisée
@@ -588,6 +586,57 @@ php artisan view:cache
 ---
 
 ## ✏️ Journal des modifications
+
+### [0.6.0] - 12/03/2026
+
+#### Vue d'ensemble
+
+✅ **Complétion majeure : Phase 1 terminée !** Le module de gestion du matériel est maintenant complet avec toutes les pages CRUD implémentées. Avancée significative sur la facturation avec génération PDF fonctionnelle.
+
+#### Ajouté
+
+- **✅ Page Show des Matériels (COMPLET)**
+    - Affichage détaillé du matériel avec toutes les informations
+    - Galerie de photos intégrée
+    - Navigation vers les actions Edit
+    - CRUD Matériels maintenant 4/4 pages ✅
+
+- **✅ Page Show des Factures**
+    - Affichage détaillé de la facture
+    - Visualisation des lignes de facturation
+    - Informations client et statut
+    - Lien de téléchargement PDF
+    - CRUD Factures maintenant 3/4 pages
+
+- **✅ Génération PDF des Factures**
+    - Installation et configuration de DomPDF 3.1
+    - Route `/factures/{id}/download-pdf` pour téléchargement
+    - Génération de factures au format PDF
+    - Méthode `downloadPdf` dans FactureController
+
+- **Bibliothèques et outils**
+    - Integration DomPDF 3.1 (barryvdh/laravel-dompdf)
+    - Configuration pour génération de documents PDF
+
+#### Complété
+
+- ✅ **Phase 1 - Gestion du matériel (100% COMPLÈTE)**
+    - Toutes les pages CRUD pour matériels finalisées
+    - Système de galerie photos fonctionnel
+    - Module matériel entièrement opérationnel
+
+#### Amélioré
+
+- Documentation du projet mise à jour avec statuts précis
+- Clarification des fonctionnalités implémentées vs. à venir
+- Métriques du code actualisées
+
+#### Priorités mises à jour
+
+1. Finaliser les pages Edit manquantes (Commandes, Factures)
+2. Améliorer la personnalisation des PDF (design, branding)
+3. Implémenter le calendrier de disponibilité des matériels
+4. Améliorer le système de galerie photos (drag & drop, optimisation)
 
 ### [0.5.0] - 26/02/2026
 
@@ -730,6 +779,10 @@ Avancée significative sur les Phases 2 et 3 avec l'implémentation du système 
 ---
 
 ## 🎯 Prochaines étapes immédiates
+
+1. **Compléter les pages Edit manquantes**
+    - Page Edit pour les factures
+    - Page Edit pour les commandes
 
 2. **Finaliser le système de Commandes/Location**
     - Implémenter le calendrier de disponibilité
