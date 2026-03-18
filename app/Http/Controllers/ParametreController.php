@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Statut_paiement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class StatutPaiementController extends Controller
+class ParametreController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return Inertia::render('parametres/Index');
     }
 
     /**
@@ -21,7 +20,7 @@ class StatutPaiementController extends Controller
      */
     public function create()
     {
-        return Inertia::render('statuts_paiement/Create');
+        //
     }
 
     /**
@@ -29,15 +28,7 @@ class StatutPaiementController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'statut' => 'required|string|max:255',
-        ]);
-
-        Statut_paiement::create([
-            'statut' => $request->statut,
-        ]);
-
-        return redirect()->route('parametres.index')->with('success', 'Statut de paiement créé avec succès.');
+        //
     }
 
     /**

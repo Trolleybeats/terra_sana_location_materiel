@@ -8,6 +8,7 @@ import {
     FileText,
     Folder,
     LayoutGrid,
+    Settings,
     User,
 } from 'lucide-vue-next';
 import NavFooter from '@/components/NavFooter.vue';
@@ -25,6 +26,7 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import AppLogo from './AppLogo.vue';
+import { Toolbar } from 'reka-ui/namespaced';
 
 const mainNavItems: NavItem[] = [
     {
@@ -51,6 +53,11 @@ const mainNavItems: NavItem[] = [
         title: 'Utilisateurs',
         href: '/utilisateurs',
         icon: User,
+    },
+    {
+        title: 'Paramètres',
+        href: '/parametres',
+        icon: Settings,
     },
 ];
 

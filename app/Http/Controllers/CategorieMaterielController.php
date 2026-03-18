@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categorie_materiel;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CategorieMaterielController extends Controller
 {
@@ -19,7 +21,7 @@ class CategorieMaterielController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('categories_materiel/Create');
     }
 
     /**
@@ -27,7 +29,17 @@ class CategorieMaterielController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        Categorie_materiel::create([
+            'nom' => $request->nom,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('parametres.index')->with('success', 'Catégorie de matériel créée avec succès.');
     }
 
     /**

@@ -11,7 +11,7 @@ class Fonction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom',
+        'fonction',
     ];
 
     public function contact_pros()

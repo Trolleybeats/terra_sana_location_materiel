@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fonction;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class FonctionController extends Controller
 {
@@ -19,7 +21,7 @@ class FonctionController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('fonctions/Create');
     }
 
     /**
@@ -27,7 +29,15 @@ class FonctionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'fonction' => 'required|string|max:255',
+        ]);
+
+        Fonction::create([
+            'fonction' => $request->fonction,
+        ]);
+
+        return redirect()->route('parametres.index')->with('success', 'Fonction créée avec succès.');
     }
 
     /**
