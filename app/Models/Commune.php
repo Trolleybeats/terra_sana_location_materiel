@@ -10,6 +10,11 @@ class Commune extends Model
     /** @use HasFactory<\Database\Factories\CommuneFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'nom_commune',
+        'numero_commune',
+    ];
+
     public function particuliers()
     {
         return $this->hasMany(Particulier::class, 'nom_commune_id' && 'numero_commune_id');

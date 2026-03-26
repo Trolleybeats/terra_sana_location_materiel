@@ -11,7 +11,7 @@ class Type extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'type',
     ];
 
     public function users()

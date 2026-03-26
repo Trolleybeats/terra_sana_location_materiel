@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Statut_paiement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
 
-class StatutPaiementController extends Controller
+class LangueController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class StatutPaiementController extends Controller
      */
     public function create()
     {
-        return Inertia::render('statuts_paiement/Create');
+        return Inertia::render('langues/Create');
     }
 
     /**
@@ -30,14 +30,14 @@ class StatutPaiementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'statut' => 'required|string|max:255',
+            'langue' => 'required|string|max:255',
         ]);
 
-        Statut_paiement::create([
-            'statut' => $request->statut,
+        \App\Models\Langue::create([
+            'langue' => $request->langue,
         ]);
 
-        return redirect()->route('parametres.index')->with('success', 'Statut de paiement créé avec succès.');
+        return redirect()->route('parametres.index')->with('success', 'Langue ajoutée avec succès.');
     }
 
     /**

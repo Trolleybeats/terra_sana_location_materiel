@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Statut_paiement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class StatutPaiementController extends Controller
+class CommuneController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +20,7 @@ class StatutPaiementController extends Controller
      */
     public function create()
     {
-        return Inertia::render('statuts_paiement/Create');
+        return Inertia::render('communes/Create');
     }
 
     /**
@@ -30,14 +29,17 @@ class StatutPaiementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'statut' => 'required|string|max:255',
+            'nom_commune' => 'required|string|max:255',
+            'numero_commune' => 'required|string|max:20',
         ]);
 
-        Statut_paiement::create([
-            'statut' => $request->statut,
+        \App\Models\Commune::create([
+            'nom_commune' => $request->nom_commune,
+            'numero_commune' => $request->numero_commune,
         ]);
 
-        return redirect()->route('parametres.index')->with('success', 'Statut de paiement créé avec succès.');
+        return redirect()->route('parametres.index')->with('success', 'Commune créée avec succès.');
+
     }
 
     /**

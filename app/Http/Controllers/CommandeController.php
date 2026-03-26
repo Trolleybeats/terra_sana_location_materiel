@@ -12,6 +12,7 @@ use App\Models\Mode_retour;
 use App\Models\Pays;
 use App\Models\Statut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -22,6 +23,7 @@ class CommandeController extends Controller
      */
     private function getOrCreateCommandeBrouillon()
     {
+        Gate::authorize('viewAny', Commande::class);
         $user = auth()->user();
         
         // Récupérer le statut "brouillon"
@@ -65,6 +67,7 @@ class CommandeController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Commande::class);
         $user = auth()->user();
         $statutBrouillon = Statut::where('statut', 'brouillon')->first();
         

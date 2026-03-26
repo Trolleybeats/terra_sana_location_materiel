@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TypeController extends Controller
 {
@@ -19,7 +20,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('types/Create');
     }
 
     /**
@@ -27,7 +28,16 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'type' => 'required|string|max:255',
+        ]);
+
+        \App\Models\Type::create([
+            'type' => $request->type,
+        ]);
+
+        return redirect()->route('parametres.index')->with('success', 'Type créé avec succès.');
+
     }
 
     /**

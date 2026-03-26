@@ -11,8 +11,7 @@ class Statut_paiement extends Model
     use HasFactory;
 
     protected $fillable = [
-        'libelle',
-        'description',
+        'statut',
     ];
 
     public function factures()
