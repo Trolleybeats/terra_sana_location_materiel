@@ -42,7 +42,7 @@ const VoirDetails = (id) => {
                     Aucune facture disponible.
                 </p>
                 <Link
-                    :href="route('commandes.create')"
+                    href="/commandes/create"
                     class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase hover:bg-blue-700"
                 >
                     Créer une commande

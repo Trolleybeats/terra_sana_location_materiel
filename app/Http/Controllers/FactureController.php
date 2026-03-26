@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Gate;
 
 class FactureController extends Controller
 {
@@ -18,9 +19,22 @@ class FactureController extends Controller
      */
     public function index()
     {
-        $factures = Facture::with(['commande.user', 'type_document', 'statut_paiement'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $user = auth()->user();
+        
+        // Si l'utilisateur est admin, récupérer toutes les factures
+        if ($user->hasType('admin')) {
+            $factures = Facture::with(['commande.user', 'type_document', 'statut_paiement'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            // Sinon, récupérer uniquement les factures des commandes de l'utilisateur
+            $factures = Facture::with(['commande.user', 'type_document', 'statut_paiement'])
+                ->whereHas('commande', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
 
         return Inertia::render('factures/Index', [
             'factures' => $factures,
@@ -50,6 +64,9 @@ class FactureController extends Controller
     {
         $facture = Facture::with(['commande.user', 'type_document', 'statut_paiement'])
             ->findOrFail($id);
+
+        // Vérifier que l'utilisateur a le droit de voir cette facture
+        Gate::authorize('view', $facture);
 
         $commande = $facture->commande->load([
             'user',
@@ -155,6 +172,9 @@ class FactureController extends Controller
             'type_document',
             'statut_paiement'
         ])->findOrFail($id);
+
+        // Vérifier que l'utilisateur a le droit de télécharger cette facture
+        Gate::authorize('view', $facture);
 
         // Charger les détails de commande avec les matériels et leurs catégories
         $detailsCommandes = $facture->commande->details_commandes()->with([

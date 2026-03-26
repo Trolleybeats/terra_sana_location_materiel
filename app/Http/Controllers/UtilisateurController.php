@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class UtilisateurController extends Controller
@@ -14,6 +15,7 @@ class UtilisateurController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', User::class);
         $users = User::all();
         return Inertia::render('utilisateurs/Index', [
             'users' => $users,
@@ -25,6 +27,7 @@ class UtilisateurController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', User::class);
         $types = Type::all();
         return Inertia::render('utilisateurs/Create', [
             'types' => $types,

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -65,5 +66,29 @@ class User extends Authenticatable
     public function professionnel(): HasOne
     {
         return $this->hasOne(Professionnel::class);
+    }
+
+    /**
+     * Get the commandes for the user.
+     */
+    public function commandes(): HasMany
+    {
+        return $this->hasMany(Commande::class);
+    }
+
+    /**
+     * Get the type associated with the user.
+     */
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
+
+    /**
+     * Check if the user has a specific type.
+     */
+    public function hasType(string $type): bool
+    {
+        return strtolower($this->type->type ?? '') === strtolower($type);
     }
 }
