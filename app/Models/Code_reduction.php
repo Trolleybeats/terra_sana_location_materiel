@@ -13,8 +13,12 @@ class Code_reduction extends Model
     protected $fillable = [
         'code',
         'type_reduction_id',
-        'valeur_reduction',
-        'date_expiration',
+        'montant',
+        'hors_tva',
+        'date_debut',
+        'date_fin',
+        'utilisation_max',
+        'utilisation_actuelles',
     ];
 
     public function typeReduction()

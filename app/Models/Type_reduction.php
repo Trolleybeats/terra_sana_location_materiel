@@ -11,7 +11,7 @@ class Type_reduction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'reduction',
     ];
 
     public function code_reductions()

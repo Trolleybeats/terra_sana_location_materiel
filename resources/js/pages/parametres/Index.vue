@@ -19,6 +19,15 @@ import AppLayout from '@/layouts/AppLayout.vue';
             <div class="mt-6 grid gap-4 rounded-lg bg-white p-6 shadow">
                 <p class="text-gray-600">
                     <a
+                        @click="$inertia.visit('code_reductions/create')"
+                        class="text-blue-600 hover:underline"
+                        >Code de réduction</a
+                    >
+                </p>
+            </div>
+            <div class="mt-6 grid gap-4 rounded-lg bg-white p-6 shadow">
+                <p class="text-gray-600">
+                    <a
                         @click="$inertia.visit('types/create')"
                         class="text-blue-600 hover:underline"
                         >Type d'utilisateurs</a

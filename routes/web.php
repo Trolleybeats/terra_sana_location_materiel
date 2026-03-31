@@ -54,6 +54,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('parametres', App\Http\Controllers\ParametreController::class);
 });
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('code_reductions', App\Http\Controllers\CodeReductionController::class);
+});
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('types', App\Http\Controllers\TypeController::class);
 });
 Route::middleware(['auth', 'verified'])->group(function () {
