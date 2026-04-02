@@ -114,6 +114,29 @@ const voirMateriel = (id) => {
                         <strong>Mode de retour:</strong>
                         {{ commande.mode_retour?.mode_retour || '-' }}
                     </p>
+                    <p v-if="commande.code_reduction_id" class="mt-2">
+                        <strong>Code de réduction:</strong>
+                        <span
+                            class="rounded bg-green-100 px-2 py-1 text-green-800"
+                        >
+                            {{ commande.code_reduction?.code || '-' }}
+                        </span>
+                    </p>
+                    <p
+                        v-if="commande.montant_reduction > 0"
+                        class="text-green-700"
+                    >
+                        <strong>Montant de la réduction:</strong>
+                        -{{ formatMontant(commande.montant_reduction) }}
+                    </p>
+                    <p>
+                        <strong>Frais de livraison:</strong>
+                        {{ formatMontant(commande.frais_livraison || 0) }}
+                    </p>
+                    <p class="text-lg font-bold">
+                        <strong>Montant total de la commande:</strong>
+                        {{ formatMontant(commande.montant_total) }}
+                    </p>
                 </div>
 
                 <!-- Liste des matériels loués -->

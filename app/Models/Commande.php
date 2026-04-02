@@ -26,6 +26,8 @@ class Commande extends Model
         'pays_id',
         'montant_total',
         'frais_livraison',
+        'code_reduction_id',
+        'montant_reduction',
     ];
 
     public function user()
@@ -59,5 +61,10 @@ class Commande extends Model
     public function mode_retour()
     {
         return $this->belongsTo(Mode_retour::class);
+    }
+
+    public function code_reduction()
+    {
+        return $this->belongsTo(Code_reduction::class);
     }
 }

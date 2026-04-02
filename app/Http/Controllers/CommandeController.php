@@ -11,6 +11,8 @@ use App\Models\Mode_livraison;
 use App\Models\Mode_retour;
 use App\Models\Pays;
 use App\Models\Statut;
+use App\Models\Code_reduction;
+use App\Models\Type_reduction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -279,6 +281,64 @@ class CommandeController extends Controller
     }
 
     /**
+     * Vérifier et appliquer un code de réduction
+     */
+    public function verifierCodeReduction(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $code = strtoupper(trim($request->code));
+        $codeReduction = Code_reduction::with('typeReduction')
+            ->where('code', $code)
+            ->first();
+
+        if (!$codeReduction) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Code de réduction invalide.',
+            ]);
+        }
+
+        // Vérifier les dates de validité
+        $now = now();
+        if ($codeReduction->date_debut && $now->lt($codeReduction->date_debut)) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Ce code n\'est pas encore actif.',
+            ]);
+        }
+
+        if ($codeReduction->date_fin && $now->gt($codeReduction->date_fin)) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Ce code a expiré.',
+            ]);
+        }
+
+        // Vérifier le nombre d'utilisations
+        if ($codeReduction->utilisation_max && $codeReduction->utilisation_actuelles >= $codeReduction->utilisation_max) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Ce code a atteint sa limite d\'utilisation.',
+            ]);
+        }
+
+        // Déterminer le type de réduction
+        $typeReduction = $codeReduction->typeReduction->reduction;
+        
+        return response()->json([
+            'valid' => true,
+            'code_reduction_id' => $codeReduction->id,
+            'type' => $typeReduction,
+            'montant' => $codeReduction->montant,
+            'hors_tva' => $codeReduction->hors_tva,
+            'message' => 'Code de réduction appliqué avec succès!',
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -294,6 +354,9 @@ class CommandeController extends Controller
             'numero_commune_id' => 'required|exists:communes,id',
             'pays_id' => 'required|exists:pays,id',
             'frais_livraison' => 'required|numeric|min:0',
+            'code_reduction_id' => 'nullable|exists:code_reductions,id',
+            'montant_reduction' => 'nullable|numeric|min:0',
+            'montant_total' => 'required|numeric|min:0',
         ]);
 
         $user = auth()->user();
@@ -318,9 +381,15 @@ class CommandeController extends Controller
         // Générer un numéro de commande unique
         $numeroCommande = 'CMD-' . date('Ymd') . '-' . strtoupper(Str::random(6));
 
-        // Calculer le montant total (détails + frais de livraison)
-        $montantDetailsCommandes = $commande->details_commandes->sum('sous_total');
-        $montantTotal = $montantDetailsCommandes + $validated['frais_livraison'];
+        // Calculer le montant total (détails + frais de livraison - réduction)
+        $montantDetailsCommandes = $validated['montant_total'];
+        $montantReduction = isset($validated['montant_reduction']) && $validated['montant_reduction'] > 0 
+            ? $validated['montant_reduction'] 
+            : 0;
+        $montantTotal = $montantDetailsCommandes + $validated['frais_livraison'] - $montantReduction;
+
+        // S'assurer que le montant total ne soit pas négatif
+        $montantTotal = max(0, $montantTotal);
 
         // Mettre à jour la commande brouillon avec les informations de livraison
         $commande->update([
@@ -338,7 +407,18 @@ class CommandeController extends Controller
             'pays_id' => $validated['pays_id'],
             'montant_total' => $montantTotal,
             'frais_livraison' => $validated['frais_livraison'],
+            'code_reduction_id' => $validated['code_reduction_id'] ?? null,
+            'montant_reduction' => $montantReduction,
         ]);
+
+        // Incrémenter le compteur d'utilisation du code de réduction
+        if (isset($validated['code_reduction_id']) && $validated['code_reduction_id']) {
+            $codeReduction = Code_reduction::find($validated['code_reduction_id']);
+            if ($codeReduction) {
+                $codeReduction->utilisation_actuelles = ($codeReduction->utilisation_actuelles ?? 0) + 1;
+                $codeReduction->save();
+            }
+        }
 
         // Créer la facture associée à la commande
         (new FactureController())->creerFacture($commande);

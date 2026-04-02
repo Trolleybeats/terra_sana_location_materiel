@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('panier/{detail}', [App\Http\Controllers\CommandeController::class, 'retirerDuPanier'])->name('panier.retirer');
     Route::put('panier/{detail}', [App\Http\Controllers\CommandeController::class, 'mettreAJourQuantite'])->name('panier.update');
     Route::delete('panier', [App\Http\Controllers\CommandeController::class, 'viderPanier'])->name('panier.vider');
+    Route::post('code-reduction/verifier', [App\Http\Controllers\CommandeController::class, 'verifierCodeReduction'])->name('code-reduction.verifier');
 });
 
 // Factures
@@ -52,6 +53,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Paramètres généraux
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('parametres', App\Http\Controllers\ParametreController::class);
+});
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('code_reductions', App\Http\Controllers\CodeReductionController::class);
 });
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('types', App\Http\Controllers\TypeController::class);
