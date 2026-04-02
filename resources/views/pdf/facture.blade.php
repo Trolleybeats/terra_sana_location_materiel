@@ -205,6 +205,17 @@
                 <td><strong>Montant HT:</strong></td>
                 <td class="text-right">{{ number_format($facture->montant_ht, 2, ',', ' ') }} €</td>
             </tr>
+            @if($commande->code_reduction_id && $commande->montant_reduction > 0)
+            <tr>
+                <td>
+                    <strong>Réduction:</strong>
+                    @if($commande->code_reduction)
+                        <small>(Code: {{ $commande->code_reduction->code }})</small>
+                    @endif
+                </td>
+                <td class="text-right" style="color: #4CAF50;">-{{ number_format($commande->montant_reduction, 2, ',', ' ') }} €</td>
+            </tr>
+            @endif
             <tr>
                 <td><strong>TVA (21%):</strong></td>
                 <td class="text-right">{{ number_format($facture->montant_tva, 2, ',', ' ') }} €</td>
