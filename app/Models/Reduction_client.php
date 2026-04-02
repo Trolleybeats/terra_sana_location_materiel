@@ -11,9 +11,19 @@ class Reduction_client extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code',
-        'pourcentage',
+        'user_id',
+        'code_reduction_id',
+        'date_attribution',
         'date_expiration',
+        'montant_fixe',
+        'pourcentage',
+    ];
+
+    protected $casts = [
+        'date_attribution' => 'date',
+        'date_expiration' => 'date',
+        'montant_fixe' => 'decimal:2',
+        'pourcentage' => 'decimal:2',
     ];
 
     public function code_reduction()

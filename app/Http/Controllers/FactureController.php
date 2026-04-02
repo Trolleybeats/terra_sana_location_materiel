@@ -75,6 +75,7 @@ class FactureController extends Controller
             'statut',
             'mode_livraison',
             'mode_retour',
+            'code_reduction',
         ]);
 
         // Charger les détails de commande avec les matériels et leurs catégories

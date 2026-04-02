@@ -7,6 +7,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    users: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const form = useForm({
@@ -17,6 +21,7 @@ const form = useForm({
     date_debut: '',
     date_fin: '',
     utilisation_max: '',
+    user_id: '',
 });
 
 const submitForm = () => {
@@ -174,6 +179,38 @@ const submitForm = () => {
                         class="mt-1 text-sm text-red-600"
                     >
                         {{ form.errors.utilisation_max }}
+                    </div>
+                </div>
+                <div>
+                    <label
+                        for="user_id"
+                        class="block text-sm font-medium text-gray-700"
+                        >Attribuer à un Utilisateur</label
+                    >
+                    <select
+                        v-model="form.user_id"
+                        id="user_id"
+                        class="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+                    >
+                        <option value="">-- Tous les utilisateurs --</option>
+                        <option
+                            v-for="user in users"
+                            :key="user.id"
+                            :value="user.id"
+                        >
+                            {{ user.name }} ({{ user.email }})
+                        </option>
+                    </select>
+                    <p class="mt-1 text-xs text-gray-500">
+                        Laissez vide pour un code accessible à tous les
+                        utilisateurs. Sélectionnez un utilisateur pour lui
+                        attribuer ce code spécifiquement.
+                    </p>
+                    <div
+                        v-if="form.errors.user_id"
+                        class="mt-1 text-sm text-red-600"
+                    >
+                        {{ form.errors.user_id }}
                     </div>
                 </div>
                 <div>

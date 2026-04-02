@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, usePage, router } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
 
 const page = usePage();
@@ -65,9 +65,16 @@ const form = useForm({
     pays_id: props.commande ? props.commande.pays_id : null,
     montant_total: props.commande ? props.commande.montant_total : null,
     frais_livraison: props.commande ? props.commande.frais_livraison : null,
+    code_reduction_id: null,
+    montant_reduction: 0,
 });
 
 const codePostal = ref('');
+const codeReduction = ref('');
+const codeReductionApplique = ref(false);
+const messageCodeReduction = ref('');
+const typeCodeReduction = ref('');
+const isVerifyingCode = ref(false);
 
 // Initialiser le code postal si une commande existe
 if (props.commande && props.commande.nom_commune_id) {
@@ -197,7 +204,112 @@ watch(
     { immediate: true }, // Calculer dès le chargement initial
 );
 
+// Fonction pour vérifier et appliquer le code de réduction
+const verifierCodeReduction = async () => {
+    if (!codeReduction.value || codeReduction.value.trim() === '') {
+        messageCodeReduction.value = 'Veuillez entrer un code de réduction.';
+        codeReductionApplique.value = false;
+        return;
+    }
+
+    isVerifyingCode.value = true;
+    messageCodeReduction.value = '';
+
+    try {
+        const response = await fetch('/code-reduction/verifier', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': decodeURIComponent(
+                    document.cookie
+                        .split('; ')
+                        .find((row) => row.startsWith('XSRF-TOKEN='))
+                        ?.split('=')[1] || '',
+                ),
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                code: codeReduction.value,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.valid) {
+            codeReductionApplique.value = true;
+            messageCodeReduction.value = data.message;
+            form.code_reduction_id = data.code_reduction_id;
+            typeCodeReduction.value = data.type;
+
+            // Calculer le montant de la réduction
+            const montantDetailsCommandes = props.detailsCommandes.reduce(
+                (sum: number, detail: any) =>
+                    sum +
+                    (Number(detail.sous_total) ||
+                        Number(detail.quantite) * Number(detail.prix_unitaire)),
+                0,
+            );
+
+            if (data.type.toLowerCase() === 'pourcentage') {
+                form.montant_reduction = Number(
+                    ((montantDetailsCommandes * data.montant) / 100).toFixed(2),
+                );
+            } else {
+                // Montant fixe
+                form.montant_reduction = Number(data.montant);
+            }
+        } else {
+            codeReductionApplique.value = false;
+            messageCodeReduction.value = data.message;
+            form.code_reduction_id = null;
+            form.montant_reduction = 0;
+        }
+    } catch (error) {
+        codeReductionApplique.value = false;
+        messageCodeReduction.value = 'Erreur lors de la vérification du code.';
+        form.code_reduction_id = null;
+        form.montant_reduction = 0;
+    } finally {
+        isVerifyingCode.value = false;
+    }
+};
+
+// Fonction pour retirer le code de réduction
+const retirerCodeReduction = () => {
+    codeReduction.value = '';
+    codeReductionApplique.value = false;
+    messageCodeReduction.value = '';
+    form.code_reduction_id = null;
+    form.montant_reduction = 0;
+    typeCodeReduction.value = '';
+};
+
+// Computed pour le total final
+const totalFinal = computed(() => {
+    // Calculer le montant de base à partir des détails de commande
+    const montantBase = props.detailsCommandes.reduce(
+        (sum: number, detail: any) =>
+            sum +
+            (Number(detail.sous_total) ||
+                Number(detail.quantite) * Number(detail.prix_unitaire)),
+        0,
+    );
+    const fraisLivraison = Number(form.frais_livraison) || 0;
+    const montantReduction = Number(form.montant_reduction) || 0;
+    const total = montantBase + fraisLivraison - montantReduction;
+    return Math.max(0, total).toFixed(2);
+});
+
 function submit() {
+    // Mettre à jour montant_total avec le calcul des détails de commande
+    form.montant_total = props.detailsCommandes.reduce(
+        (sum: number, detail: any) =>
+            sum +
+            (Number(detail.sous_total) ||
+                Number(detail.quantite) * Number(detail.prix_unitaire)),
+        0,
+    );
+
     form.post('/commandes', {
         onSuccess: () => {
             // Réinitialiser le formulaire après la soumission réussie
@@ -584,44 +696,143 @@ function submit() {
                             livraison/retour et les dates
                         </p>
                     </div>
-                    <div class="mb-4">
-                        <label for="montant_total"
+
+                    <!-- Code de réduction -->
+                    <div
+                        class="mb-4 rounded border border-gray-300 bg-gray-50 p-4"
+                    >
+                        <label for="code_reduction"
                             ><strong
-                                >Total (Hors frais de livraison) (€):</strong
+                                >Code de réduction (optionnel):</strong
                             ></label
                         >
-                        <input
-                            id="montant_total"
-                            type="number"
-                            step="0.01"
-                            v-model="form.montant_total"
-                            class="w-full rounded border bg-gray-100 px-3 py-2"
-                            disabled
-                        />
-                    </div>
-                    <div class="mb-4">
-                        <label for="total_commande"
-                            ><strong>Total de la commande (€):</strong></label
+                        <div class="mt-2 flex gap-2">
+                            <input
+                                id="code_reduction"
+                                type="text"
+                                v-model="codeReduction"
+                                :disabled="codeReductionApplique"
+                                class="flex-1 rounded border px-3 py-2 uppercase"
+                                :class="{
+                                    'bg-gray-100': codeReductionApplique,
+                                }"
+                                placeholder="Entrez votre code"
+                            />
+                            <button
+                                v-if="!codeReductionApplique"
+                                type="button"
+                                @click="verifierCodeReduction"
+                                :disabled="isVerifyingCode"
+                                class="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:bg-gray-400"
+                            >
+                                {{
+                                    isVerifyingCode
+                                        ? 'Vérification...'
+                                        : 'Appliquer'
+                                }}
+                            </button>
+                            <button
+                                v-else
+                                type="button"
+                                @click="retirerCodeReduction"
+                                class="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                            >
+                                Retirer
+                            </button>
+                        </div>
+                        <p
+                            v-if="messageCodeReduction"
+                            class="mt-2 text-sm"
+                            :class="{
+                                'text-green-600': codeReductionApplique,
+                                'text-red-600': !codeReductionApplique,
+                            }"
                         >
-                        <input
-                            id="total_commande"
-                            type="number"
-                            step="0.01"
-                            :value="
-                                form.montant_total && form.frais_livraison
-                                    ? (
-                                          Number(form.montant_total) +
-                                          Number(form.frais_livraison)
-                                      ).toFixed(2)
-                                    : form.montant_total
+                            {{ messageCodeReduction }}
+                        </p>
+                        <div
+                            v-if="
+                                codeReductionApplique &&
+                                form.montant_reduction > 0
                             "
-                            class="w-full rounded border bg-gray-100 px-3 py-2"
-                            disabled
-                        />
+                            class="mt-2 rounded bg-green-100 p-2"
+                        >
+                            <p class="text-sm font-semibold text-green-800">
+                                Réduction appliquée : -{{
+                                    form.montant_reduction.toFixed(2)
+                                }}€
+                            </p>
+                        </div>
                     </div>
+
+                    <!-- Récapitulatif des montants -->
+                    <div
+                        class="mb-6 rounded border-2 border-blue-200 bg-blue-50 p-4"
+                    >
+                        <h3 class="mb-3 text-lg font-semibold text-blue-900">
+                            Récapitulatif des montants
+                        </h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span>Sous-total matériels :</span>
+                                <span class="font-semibold">
+                                    {{
+                                        props.detailsCommandes
+                                            .reduce(
+                                                (sum, detail) =>
+                                                    sum +
+                                                    (Number(
+                                                        detail.sous_total,
+                                                    ) ||
+                                                        Number(
+                                                            detail.quantite,
+                                                        ) *
+                                                            Number(
+                                                                detail.prix_unitaire,
+                                                            )),
+                                                0,
+                                            )
+                                            .toFixed(2)
+                                    }}€
+                                </span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Frais de livraison :</span>
+                                <span class="font-semibold">
+                                    {{
+                                        Number(
+                                            form.frais_livraison || 0,
+                                        ).toFixed(2)
+                                    }}€
+                                </span>
+                            </div>
+                            <div
+                                v-if="form.montant_reduction > 0"
+                                class="flex justify-between text-sm text-green-700"
+                            >
+                                <span>Réduction :</span>
+                                <span class="font-semibold">
+                                    -{{
+                                        Number(form.montant_reduction).toFixed(
+                                            2,
+                                        )
+                                    }}€
+                                </span>
+                            </div>
+                            <div class="border-t-2 border-blue-300 pt-2">
+                                <div
+                                    class="flex justify-between text-lg font-bold text-blue-900"
+                                >
+                                    <span>Total à payer :</span>
+                                    <span>{{ totalFinal }}€</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button
                         type="submit"
-                        class="mx-auto block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                        class="mx-auto block rounded bg-blue-600 px-6 py-3 text-lg font-semibold text-white hover:bg-blue-700"
                     >
                         Confirmer la commande
                     </button>

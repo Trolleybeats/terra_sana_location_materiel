@@ -1,7 +1,7 @@
 # 📋 Suivi du Projet - Terra Sana Location Matériel
 
-**Dernière mise à jour :** 12 mars 2026  
-**Version :** 0.6.0 (Phase 1 complétée, Phases 2 et 3 en cours)  
+**Dernière mise à jour :** 2 avril 2026  
+**Version :** 0.7.0 (Phase 1 complétée, Phases 2 et 3 en cours)  
 **Statut :** Développement avancé
 
 ---
@@ -149,8 +149,12 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 - [x] TypeController
 - [x] TypeDocumentController
 - [x] TypeReductionController
+- [x] ParametreController
+- [x] CommuneController
+- [x] LangueController
+- [x] PaysController
 - [x] Settings (groupe de contrôleurs)
-      **Total : 22+ contrôleurs**
+      **Total : 26 contrôleurs**
 
 #### Interface utilisateur
 
@@ -161,13 +165,25 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 
 **Pages CRUD**
 
-- [x] Particuliers : Create, Show, Edit (3/3)
-- [x] Professionnels : Create, Show, Edit (3/3)
-- [x] Matériels : Index, Create, Edit, Show (4/4)
+- [x] Matériels : Index, Create, Edit, Show
+- [x] Particuliers : Create, Edit, Show
+- [x] Professionnels : Create, Edit, Show
+- [x] Factures : Index, Create, Show
 - [x] Utilisateurs : Index, Create
-- [x] Commandes : Index, Create (2/4)
-- [x] Factures : Index, Create, Show (3/4)
-- [x] Contact Pro : Create, Edit (2/4)
+- [x] Commandes : Index, Create
+- [x] Contact Pro : Create, Edit
+
+**Pages de gestion des données de référence**
+
+- [x] Catégories matériel : Create (1/4)
+- [x] Code réductions : Create (1/4)
+- [x] Fonctions : Create (1/4)
+- [x] Communes : Create (1/4)
+- [x] Langues : Create (1/4)
+- [x] Pays : Create (1/4)
+- [x] Types : Create (1/4)
+- [x] Statuts paiement : Create (1/4)
+- [x] Paramètres : Index (1/4)
 
 **Pages d'authentification (7 pages)**
 
@@ -222,17 +238,11 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
 ### Priorité haute
 
 - [ ] **Finaliser le module Commandes**
-    - Page Edit pour les commandes
-    - Validation complète du panier
     - Gestion des dates de location (début/fin)
-    - Calcul automatique des tarifs selon durée
-    - Processus de checkout complet
-    - Confirmation et suivi de statut
+    - Calendrier de disponibilité du matériel
 
-- [ ] **Compléter le module Facturation**
-    - Page Edit pour les factures
-    - Améliorer la génération automatique de factures
-    - Personnalisation du design PDF
+- [ ] **Améliorer le module Facturation**
+    - Personnalisation du design PDF (logo, couleurs, mise en page)
     - Liaison automatique facture ↔ commande
     - Système de numérotation automatique
     - Envoi par email
@@ -243,8 +253,6 @@ Application web de gestion de location de matériel pour Terra Sana, permettant 
     - Génération automatique de thumbnails
     - Réorganisation des photos par drag & drop
     - Définir une photo principale
-
-### Priorité moyenne
 
 - [ ] **Validation complète des formulaires**
     - Validation côté client renforcée (Vue.js)
@@ -561,16 +569,16 @@ php artisan view:cache
 
 **Backend (PHP/Laravel)**
 
-- Contrôleurs : 22 (+ groupe Settings)
+- Contrôleurs : 26 (+ groupe Settings)
 - Modèles Eloquent : 24
 - Migrations : 27 tables
 - Factories : 24
 - Seeders : 25 (dont DatabaseSeeder)
-- Routes : 7 groupes de ressources + 4 routes panier
+- Routes : 11+ groupes de ressources + 4 routes panier
 
 **Frontend (Vue.js/TypeScript)**
 
-- Pages Vue : 27+ (auth, crud, settings, etc.)
+- Pages Vue : 39+ (auth, crud, settings, données de référence, etc.)
 - Composants réutilisables : 140+
 - Composants UI : 20+ bibliothèques (alert, avatar, badge, button, card, etc.)
 - Layouts : 5 (AppLayout, AuthLayout + variantes)
@@ -586,6 +594,43 @@ php artisan view:cache
 ---
 
 ## ✏️ Journal des modifications
+
+### [0.7.0] - 02/04/2026
+
+#### Vue d'ensemble
+
+📊 **Audit complet et mise à jour de la documentation.** Inventaire exhaustif de toutes les pages et contrôleurs implémentés. Identification précise des modules complets et des éléments manquants pour finaliser les CRUD.
+
+#### Ajouté
+
+- **Documentation enrichie**
+    - Inventaire complet des 39+ pages Vue.js
+    - Liste détaillée des 26 contrôleurs
+    - Identification précise des pages manquantes par module
+    - Statut CRUD complet pour chaque entité
+
+- **Pages de gestion des données de référence (9 pages)**
+    - Catégories matériel : Page Create
+    - Code réductions : Page Create
+    - Fonctions : Page Create
+    - Communes : Page Create
+    - Langues : Page Create
+    - Pays : Page Create
+    - Types : Page Create
+    - Statuts paiement : Page Create
+    - Paramètres : Page Index
+
+- **Contrôleurs de gestion des données**
+    - ParametreController
+    - CommuneController
+    - LangueController
+    - PaysController
+
+#### Identifié
+
+- 9 pages de données de référence créées (Create principalement)
+- Besoin de compléter les CRUD pour ces données de référence
+- 4 contrôleurs supplémentaires pour la gestion des données
 
 ### [0.6.0] - 12/03/2026
 
@@ -780,38 +825,34 @@ Avancée significative sur les Phases 2 et 3 avec l'implémentation du système 
 
 ## 🎯 Prochaines étapes immédiates
 
-1. **Compléter les pages Edit manquantes**
-    - Page Edit pour les factures
-    - Page Edit pour les commandes
-
-2. **Finaliser le système de Commandes/Location**
+3. **Finaliser le système de Commandes/Location**
     - Implémenter le calendrier de disponibilité
     - Système de validation des dates de location
     - Calcul automatique des tarifs selon durée
     - Processus de checkout complet
     - Confirmation par email
 
-3. **Compléter le module Facturation**
-    - Génération automatique de factures PDF
+4. **Améliorer le module Facturation**
+    - Améliorer la personnalisation des PDF (design, branding)
+    - Envoi automatique par email
+    - Génération automatique de factures pour commandes
     - Liaison automatique facture ↔ commande
     - Gestion des devis
-    - Système de numérotation automatique des factures
 
-4. **Finaliser la gestion des Photos**
+5. **Finaliser la gestion des Photos**
     - Upload multiple de photos pour matériel
-    - Galerie responsive avec lightbox
     - Réorganisation par drag & drop
     - Optimisation automatique et thumbnails
     - Définir photo principale
 
-5. **Améliorer l'UX globale**
+6. **Améliorer l'UX globale**
     - Messages flash (succès/erreur) cohérents
     - Loaders et indicateurs pendant les requêtes
     - Confirmations modales pour suppressions
     - Pagination sur toutes les listes
     - Système de recherche global
 
-6. **Tests et Qualité**
+7. **Tests et Qualité**
     - Implémenter tests unitaires (Pest)
     - Tests de fonctionnalités pour CRUD principaux
     - Validation des règles métier
